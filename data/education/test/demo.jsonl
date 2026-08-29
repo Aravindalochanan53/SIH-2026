@@ -1,0 +1,5 @@
+{"grade": 1, "subject": "Mathematics", "topic": "Numbers 1-10", "language": "ta", "instruction": "1 முதல் 5 வரை தமிழில் சொல்லுங்கள்", "response": "ஒன்று, இரண்டு, மூன்று, நான்கு, ஐந்து"}
+{"grade": 1, "subject": "Mathematics", "topic": "Addition", "language": "ta", "instruction": "2 + 3 என்பதை ஒரு கதையாக சொல்லுங்கள்", "response": "இரண்டு ஆடுகளுடன் மூன்று ஆடுகள் சேர்ந்தால் ஐந்து ஆடுகள் ஆகும்."}
+{"grade": 1, "subject": "Science", "topic": "Animals", "language": "ta", "instruction": "பண்ணை விலங்குகளின் பெயர்களை சொல்லுங்கள்", "response": "பசு, ஆடு, கோழி, நாய், பூனை ஆகியவை பண்ணை விலங்குகள்."}
+{"grade": 1, "subject": "Mathematics", "topic": "Numbers 1-10", "language": "ml", "instruction": "1 മുതൽ 5 വരെ മലയാളത്തിൽ പറയുക", "response": "ഒന്ന്, രണ്ട്, മൂന്ന്, നാല്, അഞ്ച്"}
+{"grade": 1, "subject": "Science", "topic": "Plants", "language": "ml", "instruction": "ചെടികൾക്ക് എന്ത് വേണം?", "response": "ചെടികൾക്ക് വെള്ളം, വെളിച്ചം, വായു, മണ്ണ് ഇവ വേണം."}

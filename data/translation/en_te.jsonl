@@ -1,0 +1,17 @@
+{"source_lang": "en", "target_lang": "te", "source_text": "Hello", "target_text": "నమస్కారం", "category": "greetings"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Good morning", "target_text": "శుభోదయం", "category": "greetings"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Thank you", "target_text": "ధన్యవాదాలు", "category": "courtesy"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Open your book.", "target_text": "పుస్తకం తెరవండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Stand up.", "target_text": "నిలబడండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Sit down.", "target_text": "కూర్చోండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Write number five.", "target_text": "ఐదు సంఖ్యను రాయండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Count the objects.", "target_text": "వస్తువులను లెక్కించండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Look at the picture.", "target_text": "చిత్రాన్ని చూడండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Read this word.", "target_text": "ఈ పదాన్ని చదవండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Repeat after me.", "target_text": "నా వెనుక చెప్పండి.", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Who can answer?", "target_text": "ఎవరు సమాధానం చెప్పగలరు?", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "te", "source_text": "One (1)", "target_text": "ఒకటి (1)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Two (2)", "target_text": "రెండు (2)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Five (5)", "target_text": "ఐదు (5)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Book", "target_text": "పుస్తకం", "category": "school_objects"}
+{"source_lang": "en", "target_lang": "te", "source_text": "Water", "target_text": "నీరు", "category": "school_objects"}

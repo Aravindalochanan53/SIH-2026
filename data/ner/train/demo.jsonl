@@ -1,0 +1,11 @@
+{"tokens": ["ராமன்", "தஞ்சாவூர்", "மாவட்டத்தில்", "உள்ள", "அரசு", "பள்ளியில்", "படிக்கிறான்"], "ner_tags": ["B-PERSON", "B-LOCATION", "I-LOCATION", "O", "O", "B-SCHOOL", "O"], "language": "ta"}
+{"tokens": ["முதல்", "வகுப்பு", "மாணவர்கள்", "இன்று", "கணிதம்", "கற்றனர்"], "ner_tags": ["B-CLASS", "I-CLASS", "O", "B-DATE", "B-SUBJECT", "O"], "language": "ta"}
+{"tokens": ["ஆசிரியை", "சுமதி", "காலை", "8", "மணிக்கு", "வந்தார்"], "ner_tags": ["O", "B-PERSON", "O", "B-TIME", "I-TIME", "O"], "language": "ta"}
+{"tokens": ["இந்த", "பள்ளியில்", "200", "மாணவர்கள்", "படிக்கின்றனர்"], "ner_tags": ["O", "B-SCHOOL", "B-NUMBER", "O", "O"], "language": "ta"}
+{"tokens": ["രാമൻ", "തൃശ്ശൂർ", "ജില്ലയിലെ", "ഗവൺമെന്റ്", "സ്കൂളിൽ", "പഠിക്കുന്നു"], "ner_tags": ["B-PERSON", "B-LOCATION", "I-LOCATION", "O", "B-SCHOOL", "O"], "language": "ml"}
+{"tokens": ["ഒന്നാം", "ക്ലാസ്സ്", "വിദ്യാർത്ഥികൾ", "ഇന്ന്", "ഗണിതം", "പഠിച്ചു"], "ner_tags": ["B-CLASS", "I-CLASS", "O", "B-DATE", "B-SUBJECT", "O"], "language": "ml"}
+{"tokens": ["അധ്യാപിക", "സുമ", "ഉച്ചയ്ക്ക്", "12", "മണിക്ക്", "വന്നു"], "ner_tags": ["O", "B-PERSON", "O", "B-TIME", "I-TIME", "O"], "language": "ml"}
+{"tokens": ["Raman", "studies", "at", "Government", "Primary", "School", "in", "Chennai"], "ner_tags": ["B-PERSON", "O", "O", "B-SCHOOL", "I-SCHOOL", "I-SCHOOL", "O", "B-LOCATION"], "language": "en"}
+{"tokens": ["Grade", "1", "students", "are", "learning", "Mathematics", "today"], "ner_tags": ["B-CLASS", "I-CLASS", "O", "O", "O", "B-SUBJECT", "B-DATE"], "language": "en"}
+{"tokens": ["The", "teacher", "Suma", "arrived", "at", "8", "AM"], "ner_tags": ["O", "O", "B-PERSON", "O", "O", "B-TIME", "I-TIME"], "language": "en"}
+{"tokens": ["राम", "तमिलनाडु", "के", "एक", "सरकारी", "स्कूल", "में", "पढ़ता", "है"], "ner_tags": ["B-PERSON", "B-LOCATION", "O", "O", "O", "B-SCHOOL", "O", "O", "O"], "language": "hi"}

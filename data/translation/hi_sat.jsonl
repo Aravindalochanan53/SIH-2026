@@ -1,0 +1,17 @@
+{"source_lang": "hi", "target_lang": "sat", "source_text": "नमस्ते", "target_text": "ᱡᱚᱦᱟᱨ", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "सुप्रभात", "target_text": "ᱥᱟᱹᱜᱩᱱ ᱥᱮᱛᱟᱜ", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "धन्यवाद", "target_text": "ᱥᱟᱨᱦᱟᱣ", "category": "courtesy"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "किताब खोलो।", "target_text": "ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡᱽ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "खड़े हो जाओ।", "target_text": "ᱛᱤᱸᱜᱩᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "बैठ जाओ।", "target_text": "ᱫᱩᱲᱩᱵ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "संख्या पाँच लिखो।", "target_text": "ᱢᱚᱬᱮ ᱮᱞ ᱚᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "वस्तुओं को गिनो।", "target_text": "ᱡᱤᱱᱤᱥ ᱠᱚ ᱞᱮᱠᱷᱟᱭ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "चित्र को देखो।", "target_text": "ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "यह शब्द पढ़ो।", "target_text": "ᱱᱚᱣᱟ ᱟᱹᱲᱟᱹ ᱯᱟᱲᱦᱟᱣ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "मेरे पीछे दोहराओ।", "target_text": "ᱤᱧ ᱛᱟᱭᱚᱢ ᱛᱮ ᱢᱮᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "कौन उत्तर दे सकता है?", "target_text": "ᱚᱠᱚᱭ ᱛᱮᱞᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "एक (1)", "target_text": "ᱢᱤᱫ (1)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "दो (2)", "target_text": "ᱵᱟᱨ (2)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "पाँच (5)", "target_text": "ᱢᱚᱬᱮ (5)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "किताब", "target_text": "ᱯᱩᱛᱷᱤ", "category": "school_objects"}
+{"source_lang": "hi", "target_lang": "sat", "source_text": "पानी", "target_text": "ᱫᱟᱜ", "category": "school_objects"}

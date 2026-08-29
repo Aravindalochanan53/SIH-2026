@@ -1,0 +1,4 @@
+audio_file,language,transcript
+data/asr/train/ta/example_001.wav,ta,வணக்கம் மாணவர்களே இன்று நாம் கணிதம் கற்போம்
+data/asr/train/ml/example_001.wav,ml,നമസ്കാരം കുട്ടികളേ ഇന്ന് നാം ഗണിതം പഠിക്കും
+data/asr/train/hi/example_001.wav,hi,नमस्ते बच्चों आज हम गणित सीखेंगे

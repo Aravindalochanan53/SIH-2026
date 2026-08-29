@@ -1,0 +1,56 @@
+id,category,hindi,english_gloss,santhali,ho,mundari,pronunciation_sat,pronunciation_hoc,pronunciation_unr,verified
+greet_001,greetings,नमस्ते बच्चों,Hello children,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_002,greetings,सुप्रभात,Good morning,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_003,greetings,आप कैसे हैं?,How are you?,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_004,greetings,मैं ठीक हूँ,I am fine,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_005,greetings,आपका नाम क्या है?,What is your name?,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_006,greetings,मेरा नाम ... है,My name is ...,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_007,greetings,फिर मिलेंगे,See you again,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_008,greetings,धन्यवाद,Thank you,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_009,greetings,कृपया बैठिए,Please sit down,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+greet_010,greetings,सब लोग खड़े हो जाओ,Everyone stand up,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_001,classroom_instruction,अपनी किताब खोलो,Open your book,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_002,classroom_instruction,किताब बंद करो,Close the book,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_003,classroom_instruction,ध्यान से सुनो,Listen carefully,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_004,classroom_instruction,चुप रहो,Be quiet,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_005,classroom_instruction,लाइन में खड़े हो जाओ,Stand in a line,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_006,classroom_instruction,अपनी कॉपी निकालो,Take out your notebook,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_007,classroom_instruction,बोर्ड को देखो,Look at the board,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_008,classroom_instruction,दोहराओ,Repeat,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_009,classroom_instruction,यह लिखो,Write this,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+instr_010,classroom_instruction,हाथ ऊपर करो,Raise your hand,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_001,numbers,एक,One,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_002,numbers,दो,Two,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_003,numbers,तीन,Three,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_004,numbers,चार,Four,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_005,numbers,पाँच,Five,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_006,numbers,छह,Six,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_007,numbers,सात,Seven,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_008,numbers,आठ,Eight,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_009,numbers,नौ,Nine,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_010,numbers,दस,Ten,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_011,counting,कितने हैं? गिनो,How many are there? Count them,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+count_012,counting,जोड़ो और घटाओ,Add and subtract,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_001,body_parts,सिर,Head,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_002,body_parts,आँख,Eye,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_003,body_parts,नाक,Nose,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_004,body_parts,कान,Ear,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_005,body_parts,हाथ,Hand,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_006,body_parts,पैर,Foot/Leg,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_007,body_parts,मुँह,Mouth,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+body_008,body_parts,बाल,Hair,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_001,school_objects,किताब,Book,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_002,school_objects,पेंसिल,Pencil,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_003,school_objects,स्लेट,Slate,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_004,school_objects,ब्लैकबोर्ड,Blackboard,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_005,school_objects,बस्ता,School bag,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_006,school_objects,कुर्सी,Chair,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_007,school_objects,मेज़,Table,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_008,school_objects,चॉक,Chalk,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_009,school_objects,टिफ़िन,Lunch box,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+obj_010,school_objects,यूनिफ़ॉर्म,Uniform,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+enc_001,encouragement,बहुत अच्छा!,Very good!,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+enc_002,encouragement,शाबाश!,Well done!,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+enc_003,encouragement,कोशिश करो,Try again,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+ques_001,questions,क्या आपको समझ आया?,Did you understand?,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0
+ques_002,questions,किसके पास उत्तर है?,Who has the answer?,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,⟨NEEDS_REVIEW⟩,,,,0

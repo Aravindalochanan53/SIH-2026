@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRANSLARA</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo">TL</div>
+        <div>
+          <h1 class="title">TRANSLARA</h1>
+          <p class="subtitle">Multilingual Speech Translation</p>
+        </div>
+      </div>
+      <span id="status-badge" class="badge idle">Idle</span>
+    </header>
+
+    <!-- Language Selector -->
+    <section class="section">
+      <label class="label">Source & Target Languages</label>
+      <div class="lang-group">
+        <select id="source-lang" class="select" aria-label="Source Language">
+          <optgroup label="South Indian Languages">
+            <option value="ta" selected>Tamil (தமிழ்)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            <option value="ml">Malayalam (മലയാളം)</option>
+          </optgroup>
+          <optgroup label="North / Other Indian Languages">
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="sat">Santhali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
+            <option value="hoc">Ho (हो)</option>
+            <option value="unr">Mundari (मुंडारी)</option>
+          </optgroup>
+        </select>
+
+        <button id="swap-btn" class="icon-btn" title="Swap Languages">⇄</button>
+
+        <select id="target-lang" class="select" aria-label="Target Language">
+          <optgroup label="South Indian Languages">
+            <option value="ta">Tamil (தமிழ்)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            <option value="ml" selected>Malayalam (മലയാളം)</option>
+          </optgroup>
+          <optgroup label="North / Other Indian Languages">
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="sat">Santhali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
+            <option value="hoc">Ho (हो)</option>
+            <option value="unr">Mundari (मुंडारी)</option>
+          </optgroup>
+        </select>
+      </div>
+    </section>
+
+    <!-- Audio Source -->
+    <section class="section">
+      <label class="label">Audio Input Stream</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="audio-source" value="mic" checked>
+          <span>Microphone</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="audio-source" value="tab">
+          <span>Tab Audio (Meet)</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="action-section">
+      <button id="toggle-stream-btn" class="primary-btn start">
+        <span class="btn-icon">🎙️</span>
+        <span id="btn-text">Start Translation</span>
+      </button>
+    </div>
+
+    <!-- Live Subtitle Preview -->
+    <div class="preview-card">
+      <div class="preview-header">
+        <span class="preview-label">Live Speech</span>
+        <span id="latency-val" class="latency-text">-- ms</span>
+      </div>
+      <p id="transcript-text" class="preview-text placeholder">Speech will appear here...</p>
+      <div class="divider"></div>
+      <span class="preview-label">Translation</span>
+      <p id="translation-text" class="preview-text placeholder">Translation will appear here...</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

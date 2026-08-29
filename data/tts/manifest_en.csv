@@ -1,0 +1,6 @@
+text,audio_path,language,speaker_id
+Good morning students.,C:\Users\admin\OneDrive\Documents\SIH-2026\data\tts\train\en\speaker1_001.wav,en,speaker1
+Today we will learn mathematics.,C:\Users\admin\OneDrive\Documents\SIH-2026\data\tts\train\en\speaker1_002.wav,en,speaker1
+One two three four five.,C:\Users\admin\OneDrive\Documents\SIH-2026\data\tts\train\en\speaker1_003.wav,en,speaker1
+Water is life.,C:\Users\admin\OneDrive\Documents\SIH-2026\data\tts\train\en\speaker1_004.wav,en,speaker1
+Come to school every day.,C:\Users\admin\OneDrive\Documents\SIH-2026\data\tts\train\en\speaker1_005.wav,en,speaker1

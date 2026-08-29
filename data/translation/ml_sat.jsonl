@@ -1,0 +1,17 @@
+{"source_lang": "ml", "target_lang": "sat", "source_text": "നമസ്കാരം", "target_text": "ᱡᱚᱦᱟᱨ", "category": "greetings"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "സുപ്രഭാതം", "target_text": "ᱥᱟᱹᱜᱩᱱ ᱥᱮᱛᱟᱜ", "category": "greetings"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "നന്ദി", "target_text": "ᱥᱟᱨᱦᱟᱣ", "category": "courtesy"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "പുസ്തകം തുറക്കൂ.", "target_text": "ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡᱽ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "എഴുന്നേൽക്കൂ.", "target_text": "ᱛᱤᱸᱜᱩᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "ഇരിക്കൂ.", "target_text": "ᱫᱩᱲᱩᱵ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "അഞ്ച് എന്ന അക്കം എഴുതുക.", "target_text": "ᱢᱚᱬᱮ ᱮᱞ ᱚᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "വസ്തുക്കൾ എണ്ണുക.", "target_text": "ᱡᱤᱱᱤᱥ ᱠᱚ ᱞᱮᱠᱷᱟᱭ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "ചിത്രം നോക്കൂ.", "target_text": "ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "ഈ വാക്ക് വായിക്കുക.", "target_text": "ᱱᱚᱣᱟ ᱟᱹᱲᱟᱹ ᱯᱟᱲᱦᱟᱣ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "എന്റെ കൂടെ പറയൂ.", "target_text": "ᱤᱧ ᱛᱟᱭᱚᱢ ᱛᱮ ᱢᱮᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "ആർക്കാണ് ഉത്തരം പറയാൻ കഴിയുക?", "target_text": "ᱚᱠᱚᱭ ᱛᱮᱞᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?", "category": "classroom_instructions"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "ഒന്ന് (1)", "target_text": "ᱢᱤᱫ (1)", "category": "numbers"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "രണ്ട് (2)", "target_text": "ᱵᱟᱨ (2)", "category": "numbers"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "അഞ്ച് (5)", "target_text": "ᱢᱚᱬᱮ (5)", "category": "numbers"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "പുസ്തകം", "target_text": "ᱯᱩᱛᱷᱤ", "category": "school_objects"}
+{"source_lang": "ml", "target_lang": "sat", "source_text": "വെള്ളം", "target_text": "ᱫᱟᱜ", "category": "school_objects"}

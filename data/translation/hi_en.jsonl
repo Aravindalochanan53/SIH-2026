@@ -1,0 +1,17 @@
+{"source_lang": "hi", "target_lang": "en", "source_text": "नमस्ते", "target_text": "Hello", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "सुप्रभात", "target_text": "Good morning", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "धन्यवाद", "target_text": "Thank you", "category": "courtesy"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "किताब खोलो।", "target_text": "Open your book.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "खड़े हो जाओ।", "target_text": "Stand up.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "बैठ जाओ।", "target_text": "Sit down.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "संख्या पाँच लिखो।", "target_text": "Write number five.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "वस्तुओं को गिनो।", "target_text": "Count the objects.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "चित्र को देखो।", "target_text": "Look at the picture.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "यह शब्द पढ़ो।", "target_text": "Read this word.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "मेरे पीछे दोहराओ।", "target_text": "Repeat after me.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "कौन उत्तर दे सकता है?", "target_text": "Who can answer?", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "एक (1)", "target_text": "One (1)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "दो (2)", "target_text": "Two (2)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "पाँच (5)", "target_text": "Five (5)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "किताब", "target_text": "Book", "category": "school_objects"}
+{"source_lang": "hi", "target_lang": "en", "source_text": "पानी", "target_text": "Water", "category": "school_objects"}

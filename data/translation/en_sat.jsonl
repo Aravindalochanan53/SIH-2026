@@ -1,0 +1,17 @@
+{"source_lang": "en", "target_lang": "sat", "source_text": "Hello", "target_text": "ᱡᱚᱦᱟᱨ", "category": "greetings"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Good morning", "target_text": "ᱥᱟᱹᱜᱩᱱ ᱥᱮᱛᱟᱜ", "category": "greetings"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Thank you", "target_text": "ᱥᱟᱨᱦᱟᱣ", "category": "courtesy"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Open your book.", "target_text": "ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡᱽ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Stand up.", "target_text": "ᱛᱤᱸᱜᱩᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Sit down.", "target_text": "ᱫᱩᱲᱩᱵ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Write number five.", "target_text": "ᱢᱚᱬᱮ ᱮᱞ ᱚᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Count the objects.", "target_text": "ᱡᱤᱱᱤᱥ ᱠᱚ ᱞᱮᱠᱷᱟᱭ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Look at the picture.", "target_text": "ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Read this word.", "target_text": "ᱱᱚᱣᱟ ᱟᱹᱲᱟᱹ ᱯᱟᱲᱦᱟᱣ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Repeat after me.", "target_text": "ᱤᱧ ᱛᱟᱭᱚᱢ ᱛᱮ ᱢᱮᱱ ᱢᱮ᱾", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Who can answer?", "target_text": "ᱚᱠᱚᱭ ᱛᱮᱞᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "One (1)", "target_text": "ᱢᱤᱫ (1)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Two (2)", "target_text": "ᱵᱟᱨ (2)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Five (5)", "target_text": "ᱢᱚᱬᱮ (5)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Book", "target_text": "ᱯᱩᱛᱷᱤ", "category": "school_objects"}
+{"source_lang": "en", "target_lang": "sat", "source_text": "Water", "target_text": "ᱫᱟᱜ", "category": "school_objects"}

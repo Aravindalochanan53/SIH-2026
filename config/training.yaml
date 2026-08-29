@@ -1,0 +1,270 @@
+# TRANSLARA AI — Hardware-Aware Training Configuration
+# This file controls all model training, evaluation, and inference settings.
+# Designed for progressive training: start with CPU/small, scale to GPU/large.
+
+# ============================================================
+# HARDWARE DETECTION
+# ============================================================
+# Values: "auto" | "cpu" | "cuda" | "cuda:0" | "mps"
+# "auto" = detect best available device automatically
+device: "auto"
+
+# Intel Iris Xe / CPU mode: use INT8 quantization, small batch sizes
+# When CUDA is available, set fp16: true and increase batch_size
+fp16: false          # FP16 only on CUDA GPU. Keep false for CPU.
+bf16: false          # BF16 only on Ampere+ GPUs.
+quantization: "int8" # Options: "none" | "int8" | "int4"
+
+# ============================================================
+# DIRECTORY STRUCTURE
+# ============================================================
+model_dir: "models"
+data_dir: "data"
+checkpoint_dir: "models/checkpoints"
+logs_dir: "logs/training"
+eval_reports_dir: "evaluation/reports"
+
+# ============================================================
+# TRANSLARA-ASR FINE-TUNING
+# ============================================================
+asr:
+  # Base model — choose by hardware:
+  # CPU / <4GB VRAM:  "openai/whisper-tiny"
+  # 4-8GB VRAM:       "openai/whisper-small"
+  # 16+ GB VRAM:      "openai/whisper-medium" or "openai/whisper-large-v3"
+  base_model: "openai/whisper-small"   # Switch to whisper-large-v3 on GPU
+  output_model_name: "TRANSLARA-ASR-v1"
+  output_dir: "models/asr/TRANSLARA-ASR-v1"
+
+  # Supported languages for our fine-tuning
+  languages:
+    - code: "ta"
+      name: "Tamil"
+      whisper_code: "ta"
+    - code: "ml"
+      name: "Malayalam"
+      whisper_code: "ml"
+    - code: "te"
+      name: "Telugu"
+      whisper_code: "te"
+    - code: "kn"
+      name: "Kannada"
+      whisper_code: "kn"
+    - code: "hi"
+      name: "Hindi"
+      whisper_code: "hi"
+    - code: "en"
+      name: "English"
+      whisper_code: "en"
+    - code: "sat"
+      name: "Santhali"
+      whisper_code: null     # No native Whisper support — requires our fine-tuning
+      fallback: "hi"
+    - code: "hoc"
+      name: "Ho"
+      whisper_code: null
+      fallback: "hi"
+    - code: "unr"
+      name: "Mundari"
+      whisper_code: null
+      fallback: "hi"
+
+  # Training hyperparameters (CPU-optimized defaults)
+  batch_size: 4              # Increase to 16-32 on GPU
+  eval_batch_size: 4
+  gradient_accumulation_steps: 8   # Effective batch = batch_size * grad_accum = 32
+  learning_rate: 1.0e-5
+  num_train_epochs: 3
+  warmup_steps: 500
+  max_steps: -1              # -1 = use num_train_epochs
+  save_steps: 500
+  eval_steps: 500
+  logging_steps: 25
+  max_audio_duration_sec: 30
+  sampling_rate: 16000
+  resume_from_checkpoint: null  # Set path to resume training
+
+  # Data paths
+  train_data: "data/asr/train"
+  validation_data: "data/asr/validation"
+  test_data: "data/asr/test"
+
+# ============================================================
+# TRANSLARA-NMT FINE-TUNING
+# ============================================================
+translation:
+  # Base model — IndicTrans2 (open-access variants)
+  # CPU:    "ai4bharat/indictrans2-en-indic-dist-200M"
+  # GPU 8+: "ai4bharat/indictrans2-indic-en-1B" (requires HF token for gated)
+  # Alternatively use facebook/nllb-200-distilled-600M (fully open)
+  base_model: "facebook/nllb-200-distilled-600M"  # Fully open, no gate
+  output_model_name: "TRANSLARA-NMT-v1"
+  output_dir: "models/translation/TRANSLARA-NMT-v1"
+
+  # Language pairs we are fine-tuning on
+  language_pairs:
+    - src: "ta"
+      tgt: "ml"
+      nllb_src: "tam_Taml"
+      nllb_tgt: "mal_Mlym"
+    - src: "ml"
+      tgt: "ta"
+      nllb_src: "mal_Mlym"
+      nllb_tgt: "tam_Taml"
+    - src: "en"
+      tgt: "ta"
+      nllb_src: "eng_Latn"
+      nllb_tgt: "tam_Taml"
+    - src: "ta"
+      tgt: "en"
+      nllb_src: "tam_Taml"
+      nllb_tgt: "eng_Latn"
+    - src: "en"
+      tgt: "ml"
+      nllb_src: "eng_Latn"
+      nllb_tgt: "mal_Mlym"
+    - src: "en"
+      tgt: "hi"
+      nllb_src: "eng_Latn"
+      nllb_tgt: "hin_Deva"
+    - src: "hi"
+      tgt: "ta"
+      nllb_src: "hin_Deva"
+      nllb_tgt: "tam_Taml"
+    - src: "hi"
+      tgt: "sat"   # Pivot: hi -> sat (low-resource)
+      nllb_src: "hin_Deva"
+      nllb_tgt: null   # Not in NLLB; custom vocabulary extension needed
+      pivot_required: true
+
+  # Training hyperparameters
+  batch_size: 8
+  eval_batch_size: 8
+  gradient_accumulation_steps: 4
+  learning_rate: 5.0e-5
+  num_train_epochs: 5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_source_length: 256
+  max_target_length: 256
+  save_steps: 500
+  eval_steps: 500
+  logging_steps: 50
+  resume_from_checkpoint: null
+
+  # Data paths
+  train_data: "data/translation/train"
+  validation_data: "data/translation/validation"
+  test_data: "data/translation/test"
+
+# ============================================================
+# TRANSLARA-NER FINE-TUNING
+# ============================================================
+ner:
+  # Base model — XLM-RoBERTa multilingual transformer
+  base_model: "xlm-roberta-base"  # Fully open, multilingual
+  output_model_name: "TRANSLARA-NER-v1"
+  output_dir: "models/ner/TRANSLARA-NER-v1"
+
+  # Entity classes
+  labels:
+    - "O"
+    - "B-PERSON"
+    - "I-PERSON"
+    - "B-LOCATION"
+    - "I-LOCATION"
+    - "B-VILLAGE"
+    - "I-VILLAGE"
+    - "B-SCHOOL"
+    - "I-SCHOOL"
+    - "B-ORGANIZATION"
+    - "I-ORGANIZATION"
+    - "B-NUMBER"
+    - "I-NUMBER"
+    - "B-DATE"
+    - "I-DATE"
+    - "B-TIME"
+    - "I-TIME"
+    - "B-CLASS"
+    - "I-CLASS"
+    - "B-SUBJECT"
+    - "I-SUBJECT"
+
+  batch_size: 16
+  eval_batch_size: 32
+  gradient_accumulation_steps: 2
+  learning_rate: 2.0e-5
+  num_train_epochs: 10
+  max_length: 256
+  save_steps: 500
+  eval_steps: 200
+  logging_steps: 25
+  resume_from_checkpoint: null
+
+  # Data paths (IOB2 format JSONL)
+  train_data: "data/ner/train"
+  validation_data: "data/ner/validation"
+  test_data: "data/ner/test"
+
+# ============================================================
+# TRANSLARA-TTS FINE-TUNING
+# ============================================================
+tts:
+  # Base model — Facebook MMS-TTS (Meta Multilingual Speech)
+  # Supports: Tamil, Malayalam, Telugu, Kannada, Hindi, and others
+  # Fully open, no gate, multiple Indic language models available
+  base_models:
+    ta: "facebook/mms-tts-tam"
+    ml: "facebook/mms-tts-mal"
+    te: "facebook/mms-tts-tel"
+    kn: "facebook/mms-tts-kan"
+    hi: "facebook/mms-tts-hin"
+    en: "facebook/mms-tts-eng"
+    sat: null     # No base model; requires data collection + training from scratch
+    hoc: null
+    unr: null
+
+  output_model_name: "TRANSLARA-TTS-v1"
+  output_dir: "models/tts/TRANSLARA-TTS-v1"
+  sampling_rate: 16000
+
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-4
+  num_train_epochs: 100       # TTS requires many epochs for quality
+  max_text_length: 512
+
+  train_data: "data/tts/train"
+  validation_data: "data/tts/validation"
+
+# ============================================================
+# TRANSLARA-EDU FINE-TUNING
+# ============================================================
+education:
+  # Base model — small open instruction-tuned LLM
+  # CPU:       "Qwen/Qwen2.5-0.5B-Instruct"   (~1GB RAM)
+  # 4-8GB GPU: "Qwen/Qwen2.5-1.5B-Instruct"
+  # 16+ GB:    "Qwen/Qwen2.5-7B-Instruct"
+  base_model: "Qwen/Qwen2.5-0.5B-Instruct"
+  output_model_name: "TRANSLARA-EDU-v1"
+  output_dir: "models/education/TRANSLARA-EDU-v1"
+
+  # Teaching grades
+  grades: [1, 2, 3]
+
+  # Training via PEFT/LoRA for memory efficiency
+  use_lora: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.1
+  lora_target_modules: ["q_proj", "v_proj"]
+
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-4
+  num_train_epochs: 5
+  max_length: 1024
+  save_steps: 200
+  logging_steps: 20
+
+  train_data: "data/education"

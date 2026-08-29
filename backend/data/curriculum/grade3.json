@@ -1,0 +1,18 @@
+{
+  "grade": 3,
+  "level": "FLN - Foundational Literacy & Numeracy",
+  "learning_outcomes": [
+    "Numbers and place values up to 100",
+    "Multiplication and division conceptual understanding",
+    "Bilingual reading fluency in mother tongue and Hindi",
+    "Participate in group dialogues and storytelling"
+  ],
+  "numeracy_topics": [
+    {"topic": "Numbers up to 100", "range": [1, 100]},
+    {"topic": "Problem Solving", "operations": ["गुणा (Multiplication)", "भाग (Division)"]}
+  ],
+  "literacy_topics": [
+    {"topic": "Story Comprehension", "categories": ["folktales", "environment"]},
+    {"topic": "Grammar & Expression", "categories": ["time", "calendar", "discipline"]}
+  ]
+}

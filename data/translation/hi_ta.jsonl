@@ -1,0 +1,17 @@
+{"source_lang": "hi", "target_lang": "ta", "source_text": "नमस्ते", "target_text": "வணக்கம்", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "सुप्रभात", "target_text": "காலை வணக்கம்", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "धन्यवाद", "target_text": "நன்றி", "category": "courtesy"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "किताब खोलो।", "target_text": "புத்தகத்தைத் திறக்கவும்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "खड़े हो जाओ।", "target_text": "எழுந்து நில்லுங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "बैठ जाओ।", "target_text": "உட்காருங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "संख्या पाँच लिखो।", "target_text": "எண் ஐந்தை எழுதுங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "वस्तुओं को गिनो।", "target_text": "பொருட்களை எண்ணுங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "चित्र को देखो।", "target_text": "படத்தைப் பாருங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "यह शब्द पढ़ो।", "target_text": "இந்த வார்த்தையைப் படியுங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "मेरे पीछे दोहराओ।", "target_text": "என் பின்னால் சொல்லுங்கள்.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "कौन उत्तर दे सकता है?", "target_text": "யார் பதில் சொல்ல முடியும்?", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "एक (1)", "target_text": "ஒன்று (1)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "दो (2)", "target_text": "இரண்டு (2)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "पाँच (5)", "target_text": "ஐந்து (5)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "किताब", "target_text": "புத்தகம்", "category": "school_objects"}
+{"source_lang": "hi", "target_lang": "ta", "source_text": "पानी", "target_text": "தண்ணீர்", "category": "school_objects"}

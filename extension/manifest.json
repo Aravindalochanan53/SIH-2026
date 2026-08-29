@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "TRANSLARA — Real-Time Indian Language Translator",
+  "version": "1.0.0",
+  "description": "AI-Powered Multilingual Speech-to-Speech Translation & Live Subtitles for South & North Indian Languages.",
+  "permissions": [
+    "tabCapture",
+    "activeTab",
+    "storage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "ws://localhost:8000/*",
+    "https://meet.google.com/*",
+    "*://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "TRANSLARA Assistant",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*", "*://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

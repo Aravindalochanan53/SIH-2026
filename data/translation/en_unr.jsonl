@@ -1,0 +1,17 @@
+{"source_lang": "en", "target_lang": "unr", "source_text": "Hello", "target_text": "जोहार", "category": "greetings"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Good morning", "target_text": "बुगी सेताः", "category": "greetings"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Thank you", "target_text": "सराहव", "category": "courtesy"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Open your book.", "target_text": "होनको पुथी ओलोल पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Stand up.", "target_text": "तिंगु पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Sit down.", "target_text": "दुबुङ पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Write number five.", "target_text": "मोड़े नंबर ओल पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Count the objects.", "target_text": "चीज को लेखाए पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Look at the picture.", "target_text": "मुरुत नेल पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Read this word.", "target_text": "नेया कजी पड़ाव पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Repeat after me.", "target_text": "ऐंग तायोम कजी पे।", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Who can answer?", "target_text": "ओकोए कजी दड़ेया?", "category": "classroom_instructions"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "One (1)", "target_text": "मियाद (1)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Two (2)", "target_text": "बारिया (2)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Five (5)", "target_text": "मोड़े (5)", "category": "numbers"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Book", "target_text": "पुथी", "category": "school_objects"}
+{"source_lang": "en", "target_lang": "unr", "source_text": "Water", "target_text": "दाः", "category": "school_objects"}

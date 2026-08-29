@@ -1,0 +1,17 @@
+{"source_lang": "hi", "target_lang": "ml", "source_text": "नमस्ते", "target_text": "നമസ്കാരം", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "सुप्रभात", "target_text": "സുപ്രഭാതം", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "धन्यवाद", "target_text": "നന്ദി", "category": "courtesy"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "किताब खोलो।", "target_text": "പുസ്തകം തുറക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "खड़े हो जाओ।", "target_text": "എഴുന്നേൽക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "बैठ जाओ।", "target_text": "ഇരിക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "संख्या पाँच लिखो।", "target_text": "അഞ്ച് എന്ന അക്കം എഴുതുക.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "वस्तुओं को गिनो।", "target_text": "വസ്തുക്കൾ എണ്ണുക.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "चित्र को देखो।", "target_text": "ചിത്രം നോക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "यह शब्द पढ़ो।", "target_text": "ഈ വാക്ക് വായിക്കുക.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "मेरे पीछे दोहराओ।", "target_text": "എന്റെ കൂടെ പറയൂ.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "कौन उत्तर दे सकता है?", "target_text": "ആർക്കാണ് ഉത്തരം പറയാൻ കഴിയുക?", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "एक (1)", "target_text": "ഒന്ന് (1)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "दो (2)", "target_text": "രണ്ട് (2)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "पाँच (5)", "target_text": "അഞ്ച് (5)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "किताब", "target_text": "പുസ്തകം", "category": "school_objects"}
+{"source_lang": "hi", "target_lang": "ml", "source_text": "पानी", "target_text": "വെള്ളം", "category": "school_objects"}

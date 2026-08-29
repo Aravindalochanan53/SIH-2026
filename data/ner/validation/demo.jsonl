@@ -1,0 +1,3 @@
+{"tokens": ["कक्षा", "एक", "के", "छात्र", "आज", "गणित", "सीख", "रहे", "हैं"], "ner_tags": ["B-CLASS", "I-CLASS", "O", "O", "B-DATE", "B-SUBJECT", "O", "O", "O"], "language": "hi"}
+{"tokens": ["రాముడు", "తిరుపతి", "లోని", "ప్రభుత్వ", "పాఠశాలలో", "చదువుతున్నాడు"], "ner_tags": ["B-PERSON", "B-LOCATION", "O", "O", "B-SCHOOL", "O"], "language": "te"}
+{"tokens": ["ರಾಮ", "ಬೆಂಗಳೂರಿನ", "ಸರ್ಕಾರಿ", "ಶಾಲೆಯಲ್ಲಿ", "ಓದುತ್ತಿದ್ದಾನೆ"], "ner_tags": ["B-PERSON", "B-LOCATION", "O", "B-SCHOOL", "O"], "language": "kn"}

@@ -1,0 +1,18 @@
+{
+  "grade": 1,
+  "level": "FLN - Foundational Literacy & Numeracy",
+  "learning_outcomes": [
+    "Identify numbers from 1 to 10 in numerals and words",
+    "Recognize classroom objects and basic body parts in Hindi and mother tongue",
+    "Respond to simple classroom instructions in bilingual mode",
+    "Count objects up to 10 with 1-to-1 correspondence"
+  ],
+  "numeracy_topics": [
+    {"topic": "Counting 1-10", "numbers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]},
+    {"topic": "Comparing Quantities", "concepts": ["अधिक (More)", "कम (Less)", "बराबर (Equal)"]}
+  ],
+  "literacy_topics": [
+    {"topic": "Greetings and Routine", "categories": ["greetings", "classroom_instruction"]},
+    {"topic": "Vocabulary Building", "categories": ["body_parts", "school_objects"]}
+  ]
+}

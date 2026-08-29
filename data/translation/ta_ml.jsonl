@@ -1,0 +1,17 @@
+{"source_lang": "ta", "target_lang": "ml", "source_text": "வணக்கம்", "target_text": "നമസ്കാരം", "category": "greetings"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "காலை வணக்கம்", "target_text": "സുപ്രഭാതം", "category": "greetings"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "நன்றி", "target_text": "നന്ദി", "category": "courtesy"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "புத்தகத்தைத் திறக்கவும்.", "target_text": "പുസ്തകം തുറക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "எழுந்து நில்லுங்கள்.", "target_text": "എഴുന്നേൽക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "உட்காருங்கள்.", "target_text": "ഇരിക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "எண் ஐந்தை எழுதுங்கள்.", "target_text": "അഞ്ച് എന്ന അക്കം എഴുതുക.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "பொருட்களை எண்ணுங்கள்.", "target_text": "വസ്തുക്കൾ എണ്ണുക.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "படத்தைப் பாருங்கள்.", "target_text": "ചിത്രം നോക്കൂ.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "இந்த வார்த்தையைப் படியுங்கள்.", "target_text": "ഈ വാക്ക് വായിക്കുക.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "என் பின்னால் சொல்லுங்கள்.", "target_text": "എന്റെ കൂടെ പറയൂ.", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "யார் பதில் சொல்ல முடியும்?", "target_text": "ആർക്കാണ് ഉത്തരം പറയാൻ കഴിയുക?", "category": "classroom_instructions"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "ஒன்று (1)", "target_text": "ഒന്ന് (1)", "category": "numbers"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "இரண்டு (2)", "target_text": "രണ്ട് (2)", "category": "numbers"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "ஐந்து (5)", "target_text": "അഞ്ച് (5)", "category": "numbers"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "புத்தகம்", "target_text": "പുസ്തകം", "category": "school_objects"}
+{"source_lang": "ta", "target_lang": "ml", "source_text": "தண்ணீர்", "target_text": "വെള്ളം", "category": "school_objects"}

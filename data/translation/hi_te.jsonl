@@ -1,0 +1,17 @@
+{"source_lang": "hi", "target_lang": "te", "source_text": "नमस्ते", "target_text": "నమస్కారం", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "सुप्रभात", "target_text": "శుభోదయం", "category": "greetings"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "धन्यवाद", "target_text": "ధన్యవాదాలు", "category": "courtesy"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "किताब खोलो।", "target_text": "పుస్తకం తెరవండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "खड़े हो जाओ।", "target_text": "నిలబడండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "बैठ जाओ।", "target_text": "కూర్చోండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "संख्या पाँच लिखो।", "target_text": "ఐదు సంఖ్యను రాయండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "वस्तुओं को गिनो।", "target_text": "వస్తువులను లెక్కించండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "चित्र को देखो।", "target_text": "చిత్రాన్ని చూడండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "यह शब्द पढ़ो।", "target_text": "ఈ పదాన్ని చదవండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "मेरे पीछे दोहराओ।", "target_text": "నా వెనుక చెప్పండి.", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "कौन उत्तर दे सकता है?", "target_text": "ఎవరు సమాధానం చెప్పగలరు?", "category": "classroom_instructions"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "एक (1)", "target_text": "ఒకటి (1)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "दो (2)", "target_text": "రెండు (2)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "पाँच (5)", "target_text": "ఐదు (5)", "category": "numbers"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "किताब", "target_text": "పుస్తకం", "category": "school_objects"}
+{"source_lang": "hi", "target_lang": "te", "source_text": "पानी", "target_text": "నీరు", "category": "school_objects"}
