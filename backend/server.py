@@ -1,5 +1,6 @@
 """
 TRANSLARA — Main FastAPI Application & Real-Time WebSocket Streaming Server.
+Connected to Microsoft SQL Server (MSSQL) with local SQLite offline cache fallback.
 """
 from __future__ import annotations
 
@@ -11,13 +12,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from backend.api import cache, chat, health, languages, pedagogy, translation, video, voice
+from backend.auth import router as auth_router
 from backend.cache.database import init_db as init_cache_db
-from backend.database.connection import init_db as init_main_db
-from backend.cache.seed_cache import seed_all
+from backend.cache.seed_cache import seed_all as seed_cache_all
 from backend.config import settings
+from backend.database.connection import init_db as init_main_db
+from backend.database.seed import seed_database
+from backend.ml_engine.audio_processor import AudioProcessor
 from backend.ml_engine.pipeline import run_pipeline, stream_tts, warm_up
 from backend.ml_engine.vad import StreamingVAD
-from backend.ml_engine.audio_processor import AudioProcessor
 from backend.pedagogy.fonts import register_all_fonts
 
 
@@ -26,14 +29,20 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     logger.info("Initializing TRANSLARA Backend Server...")
 
-    # 1. Initialize Databases & Seed Data
+    # 1. Initialize Primary MSSQL Database & Local Offline Cache
+    try:
+        init_main_db()
+        l_cnt, p_cnt = seed_database()
+        logger.info(f"TRANSLARA Primary Database initialized (seeded {l_cnt} languages, {p_cnt} phrases).")
+    except Exception as e:
+        logger.warning(f"Primary database initialization notice ({e}); running with offline resilience.")
+
     try:
         init_cache_db()
-        init_main_db()
-        p_cnt, e_cnt = seed_all()
-        logger.info(f"TRANSLARA Database initialized (seeded {p_cnt} phrases, {e_cnt} entities)")
+        cp_cnt, ce_cnt = seed_cache_all()
+        logger.info(f"TRANSLARA Offline Cache initialized (seeded {cp_cnt} phrases, {ce_cnt} entities).")
     except Exception as e:
-        logger.warning(f"Database initialization notice: {e}")
+        logger.warning(f"Offline cache notice: {e}")
 
     # 2. Register Indian Language Fonts
     try:
@@ -54,7 +63,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI App
 app = FastAPI(
     title="TRANSLARA API",
-    description="Real-Time Multilingual Speech Translation, Video Engine & AI Pedagogy Assistant",
+    description="Real-Time Multilingual Speech Translation, Video Engine & AI Pedagogy Assistant with MSSQL",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -69,6 +78,7 @@ app.add_middleware(
 )
 
 # Register API Routers
+app.include_router(auth_router)
 app.include_router(health.router)
 app.include_router(languages.router)
 app.include_router(translation.router)
@@ -88,6 +98,7 @@ async def root():
         "health": "/health",
         "languages": "/api/languages",
         "capabilities": "/api/capabilities",
+        "auth": "/api/auth",
     }
 
 
@@ -99,9 +110,10 @@ async def root():
 async def live_stream_websocket(websocket: WebSocket):
     """
     Bi-directional streaming WebSocket:
-    - Receives PCM16 16kHz audio frames from real browser microphone or tab capture
+    - Receives PCM16 16kHz audio frames from browser microphone
     - Runs streaming VAD -> ASR -> Entity Lock -> NMT -> Entity Restoration
-    - Streams live transcript, translation metadata, and ~200ms chunked TTS audio back to client
+    - Streams live transcript, translation metadata, and chunked TTS audio back to client
+    - Does NOT store continuous raw audio chunks in database; only stores finished transcripts
     """
     await websocket.accept()
     logger.info("WebSocket client connected to TRANSLARA Speech Bridge")

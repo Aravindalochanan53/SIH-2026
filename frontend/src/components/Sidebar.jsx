@@ -1,5 +1,8 @@
 import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import {
+  LayoutDashboard,
+  Languages,
   Mic,
   Video,
   MessageSquare,
@@ -9,46 +12,42 @@ import {
   WifiOff,
   History,
   Settings,
-  Languages,
 } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
 
 export function Sidebar() {
-  const { activeTab, setActiveTab } = useAppStore();
-
   const navItems = [
-    { id: 'home', label: 'Translator', icon: Languages },
-    { id: 'voice', label: 'Live Speech', icon: Mic, badge: 'Live' },
-    { id: 'video', label: 'Video', icon: Video, badge: 'HD' },
-    { id: 'chat', label: 'AI Chat', icon: MessageSquare, badge: 'AI' },
-    { id: 'meeting', label: 'Live Meeting', icon: Radio },
-    { id: 'learning', label: 'Flashcards', icon: BookOpen },
-    { id: 'worksheets', label: 'Worksheets', icon: FileText },
-    { id: 'offline', label: 'Offline Library', icon: WifiOff },
-    { id: 'history', label: 'History', icon: History },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/translate', label: 'Translator', icon: Languages },
+    { to: '/voice', label: 'Live Speech', icon: Mic, badge: 'Live' },
+    { to: '/video', label: 'Video', icon: Video, badge: 'HD' },
+    { to: '/chat', label: 'AI Chat', icon: MessageSquare, badge: 'AI' },
+    { to: '/meeting', label: 'Live Meeting', icon: Radio },
+    { to: '/learning', label: 'Flashcards', icon: BookOpen },
+    { to: '/worksheets', label: 'Worksheets', icon: FileText },
+    { to: '/offline', label: 'Offline Library', icon: WifiOff },
+    { to: '/history', label: 'History', icon: History },
+    { to: '/settings', label: 'Settings', icon: Settings },
   ];
 
   return (
     <aside className="sidebar-nav">
-      <div className="sidebar-brand" onClick={() => setActiveTab('home')}>
+      <Link to="/" className="sidebar-brand">
         <div className="brand-logo-icon">TL</div>
         <div className="brand-text">
           <span className="brand-name">TRANSLARA</span>
           <span className="brand-badge">EdTech AI</span>
         </div>
-      </div>
+      </Link>
 
       <nav className="nav-menu" aria-label="Main Navigation">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activeTab === item.id;
           return (
-            <button
-              key={item.id}
-              className={`nav-item ${isActive ? 'active' : ''}`}
-              onClick={() => setActiveTab(item.id)}
-              aria-current={isActive ? 'page' : undefined}
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
               <Icon size={18} className="nav-icon" />
               <span className="nav-label">{item.label}</span>
@@ -57,7 +56,7 @@ export function Sidebar() {
                   {item.badge}
                 </span>
               )}
-            </button>
+            </NavLink>
           );
         })}
       </nav>

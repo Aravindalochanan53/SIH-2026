@@ -238,11 +238,13 @@ class CacheStatsResponse(BaseModel):
 # --- Health & Observability Models ---
 
 class HealthResponse(BaseModel):
-    status: str = "ok"
+    status: str = "healthy"
+    database: str = "connected"
+    ai_engine: str = "ready"
     app_name: str = "TRANSLARA"
     version: str = "1.0.0"
-    mock_mode: bool = True
-    demo_mode: bool = True
+    mock_mode: bool = False
+    demo_mode: bool = False
     asr: SubsystemStatus = SubsystemStatus.READY
     nmt: SubsystemStatus = SubsystemStatus.READY
     tts: SubsystemStatus = SubsystemStatus.READY

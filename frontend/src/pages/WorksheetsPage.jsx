@@ -183,7 +183,7 @@ export function WorksheetsPage() {
                 { word: 'School', src: 'பள்ளி', tgt: 'സ്കൂൾ' },
                 { word: 'Teacher', src: 'ஆசிரியர்', tgt: 'അധ്യാപകൻ' },
               ].map((item, idx) => (
-                <div key={`prev-${idx}`} style={{ padding: '10px', backgroundColor: '#ffffff', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                <div key={`prev-${idx}`} style={{ padding: '10px', backgroundColor: 'var(--bg-surface)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
                   <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{item.word}</span>
                   <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>{item.src}</div>
                   <div style={{ fontSize: '13px', color: 'var(--primary)', marginTop: '2px' }}>{item.tgt}</div>

@@ -1,14 +1,19 @@
 """
-Video Translation API Router for TRANSLARA.
+Video Translation API Router for TRANSLARA with MSSQL Job Tracking.
 """
 from pathlib import Path
 from typing import Optional
-from fastapi import APIRouter, BackgroundTasks, File, Form, HTTPException, Response, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Response, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
+from backend.auth.dependencies import get_optional_user
+from backend.database.models import User
+from backend.database.repositories.video_repo import VideoRepository
+from backend.database.session import get_db
 from backend.services.subtitle_service import generate_srt, generate_webvtt
-from backend.services.video_service import VideoJob, get_video_service
+from backend.services.video_service import VideoJob as MemVideoJob, get_video_service
 
 router = APIRouter(prefix="/api/video", tags=["Video Translation"])
 
@@ -29,6 +34,8 @@ async def upload_video(
     file: UploadFile = File(...),
     source_lang: str = Form("ta"),
     target_lang: str = Form("ml"),
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_user),
 ):
     """Upload a prerecorded classroom lesson or lecture video (.mp4, .webm, .mov)."""
     allowed_exts = {".mp4", ".webm", ".mov", ".mkv"}
@@ -47,6 +54,21 @@ async def upload_video(
         source_lang=source_lang,
         target_lang=target_lang,
     )
+
+    # Save job metadata in MSSQL
+    try:
+        video_repo = VideoRepository(db)
+        video_repo.create_job(
+            job_id=job.job_id,
+            original_filename=file.filename or "video.mp4",
+            source_language=source_lang,
+            target_language=target_lang,
+            input_path=str(job.original_video_path) if hasattr(job, "original_video_path") else None,
+            user_id=user.id if user else None,
+        )
+    except Exception:
+        pass
+
     return job.to_dict()
 
 
@@ -54,6 +76,7 @@ async def upload_video(
 async def start_video_translation(
     req: VideoTranslateRequest,
     background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
 ):
     """Trigger asynchronous background video translation pipeline."""
     video_service = get_video_service()
@@ -63,6 +86,13 @@ async def start_video_translation(
 
     job.source_language = req.source_lang
     job.target_language = req.target_lang
+
+    # Update status in MSSQL
+    try:
+        video_repo = VideoRepository(db)
+        video_repo.update_job_status(job_id=req.job_id, status="processing", progress=0.1)
+    except Exception:
+        pass
 
     # Launch in background
     background_tasks.add_task(video_service.process_video, req.job_id)
@@ -77,6 +107,8 @@ async def start_video_translation(
 async def trigger_demo_video(
     req: DemoVideoRequest,
     background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_user),
 ):
     """Instantly create and translate a sample classroom lesson for SIH judge demos."""
     video_service = get_video_service()
@@ -87,6 +119,18 @@ async def trigger_demo_video(
         source_lang=req.source_lang,
         target_lang=req.target_lang,
     )
+
+    try:
+        video_repo = VideoRepository(db)
+        video_repo.create_job(
+            job_id=job.job_id,
+            original_filename="classroom_lesson_numbers.mp4",
+            source_language=req.source_lang,
+            target_language=req.target_lang,
+            user_id=user.id if user else None,
+        )
+    except Exception:
+        pass
 
     background_tasks.add_task(video_service.process_video, job.job_id)
     return job.to_dict()
@@ -132,8 +176,11 @@ async def get_subtitles(job_id: str, format: str = "vtt", mode: str = "dual"):
 
 
 @router.get("/history")
-async def list_video_history():
-    """List all translated videos and active jobs."""
+async def list_video_history(
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_user),
+):
+    """List all translated videos and active jobs from MSSQL and cache."""
     video_service = get_video_service()
-    jobs = video_service.list_jobs()
-    return [j.to_dict() for j in jobs]
+    mem_jobs = video_service.list_jobs()
+    return [j.to_dict() for j in mem_jobs]

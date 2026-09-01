@@ -1,9 +1,41 @@
 import { create } from 'zustand';
 
+const TOKEN_KEY = 'translara_auth_token';
+const USER_KEY = 'translara_user';
+
+function loadPersistedAuth() {
+  try {
+    const token = localStorage.getItem(TOKEN_KEY);
+    const userStr = localStorage.getItem(USER_KEY);
+    if (token && userStr) {
+      return { token, user: JSON.parse(userStr), isAuthenticated: true };
+    }
+  } catch (e) {}
+  return { token: null, user: null, isAuthenticated: false };
+}
+
+const persisted = loadPersistedAuth();
+
 export const useAppStore = create((set, get) => ({
-  // Navigation & Shell
-  activeTab: 'home',
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  // Authentication
+  user: persisted.user,
+  token: persisted.token,
+  isAuthenticated: persisted.isAuthenticated,
+
+  login: (token, user) => {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    set({ token, user, isAuthenticated: true });
+  },
+  logout: () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    set({ token: null, user: null, isAuthenticated: false });
+  },
+  setUser: (user) => {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    set({ user });
+  },
 
   // Global Languages
   sourceLang: 'ta',

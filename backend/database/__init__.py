@@ -1,31 +1,42 @@
-from backend.database.connection import Base, engine, get_db, init_db, SessionLocal
+"""
+Database package for TRANSLARA.
+Exports Base, engine, SessionLocal, get_db, init_db, and ORM models.
+"""
+from backend.database.base import Base
+from backend.database.connection import check_db_health, engine, init_db
+from backend.database.session import SessionLocal, get_db
 from backend.database.models import (
-    User,
-    Language,
-    Translation,
-    TranslationHistory,
+    ChatMessage,
+    ChatSession,
     ClassroomPhrase,
     EntityRecord,
-    VideoJob,
-    ChatHistory,
-    Worksheet,
     Flashcard,
+    Language,
+    ModelUsage,
+    Translation,
+    TranslationHistory,
+    User,
+    VideoJob,
+    Worksheet,
 )
 
 __all__ = [
     "Base",
     "engine",
+    "SessionLocal",
     "get_db",
     "init_db",
-    "SessionLocal",
+    "check_db_health",
     "User",
     "Language",
     "Translation",
     "TranslationHistory",
-    "ClassroomPhrase",
-    "EntityRecord",
+    "ChatSession",
+    "ChatMessage",
     "VideoJob",
-    "ChatHistory",
     "Worksheet",
     "Flashcard",
+    "ClassroomPhrase",
+    "EntityRecord",
+    "ModelUsage",
 ]

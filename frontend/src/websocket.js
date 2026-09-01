@@ -19,7 +19,8 @@ export class StreamingAudioBridge {
     this.isPlaying = false;
     this.playbackContext = null;
 
-    this.wsUrl = 'ws://localhost:8000/ws/live-stream';
+    const baseWs = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000';
+    this.wsUrl = `${baseWs}/ws/live-stream`;
   }
 
   async start({ sourceLang = 'ta', targetLang = 'ml' }) {

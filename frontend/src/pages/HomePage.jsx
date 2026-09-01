@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Mic,
   MicOff,
@@ -16,9 +17,6 @@ import {
   Radio,
   ClipboardPaste,
   Trash2,
-  Globe2,
-  ShieldCheck,
-  Zap,
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -31,7 +29,6 @@ export function HomePage() {
     setSourceLang,
     setTargetLang,
     swapLanguages,
-    setActiveTab,
     addHistoryItem,
     isSimulatedOffline,
   } = useAppStore();
@@ -82,7 +79,6 @@ export function HomePage() {
       }
     } catch (err) {
       console.error('Translation error:', err);
-      // Fallback display
       setOutputText(`[Translation Error: ${err.message}]`);
     } finally {
       setIsLoading(false);
@@ -123,14 +119,9 @@ export function HomePage() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(outputText);
-      // Map standard language codes
       const langMap = {
-        en: 'en-US',
-        ta: 'ta-IN',
-        ml: 'ml-IN',
-        te: 'te-IN',
-        kn: 'kn-IN',
-        hi: 'hi-IN',
+        en: 'en-US', ta: 'ta-IN', ml: 'ml-IN',
+        te: 'te-IN', kn: 'kn-IN', hi: 'hi-IN',
       };
       utterance.lang = langMap[targetLang] || 'en-US';
       utterance.rate = 0.9;
@@ -142,118 +133,61 @@ export function HomePage() {
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      if (text) {
-        setInputText(text);
-      }
+      if (text) setInputText(text);
     } catch (err) {
       console.warn('Clipboard read notice:', err);
     }
   };
 
-  // Real Microphone Audio Capture via Web Speech API / getUserMedia
+  // Microphone
   const handleToggleMic = async () => {
     setMicError(null);
-
     if (isRecording) {
-      // Stop recording
       if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (e) {}
+        try { recognitionRef.current.stop(); } catch (e) {}
       }
       clearInterval(timerRef.current);
       setIsRecording(false);
       setRecordingSeconds(0);
     } else {
-      // Start recording
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
       if (SpeechRecognition) {
         try {
           const rec = new SpeechRecognition();
           rec.continuous = false;
           rec.interimResults = true;
-
-          const langMap = {
-            en: 'en-US',
-            ta: 'ta-IN',
-            te: 'te-IN',
-            kn: 'kn-IN',
-            ml: 'ml-IN',
-            hi: 'hi-IN',
-          };
+          const langMap = { en: 'en-US', ta: 'ta-IN', te: 'te-IN', kn: 'kn-IN', ml: 'ml-IN', hi: 'hi-IN' };
           rec.lang = langMap[sourceLang] || 'en-US';
-
           rec.onstart = () => {
             setIsRecording(true);
             setRecordingSeconds(0);
-            timerRef.current = setInterval(() => {
-              setRecordingSeconds((s) => s + 1);
-            }, 1000);
+            timerRef.current = setInterval(() => setRecordingSeconds((s) => s + 1), 1000);
           };
-
           rec.onresult = (event) => {
-            const transcript = Array.from(event.results)
-              .map((r) => r[0].transcript)
-              .join('');
+            const transcript = Array.from(event.results).map((r) => r[0].transcript).join('');
             setInputText(transcript);
           };
-
           rec.onerror = (e) => {
-            console.error('Speech recognition notice:', e.error);
-            if (e.error === 'not-allowed') {
-              setMicError('Microphone permission required. Please allow microphone access in your browser.');
-            }
+            if (e.error === 'not-allowed') setMicError('Microphone permission required.');
             setIsRecording(false);
             clearInterval(timerRef.current);
           };
-
-          rec.onend = () => {
-            setIsRecording(false);
-            clearInterval(timerRef.current);
-          };
-
+          rec.onend = () => { setIsRecording(false); clearInterval(timerRef.current); };
           recognitionRef.current = rec;
           rec.start();
         } catch (e) {
-          console.warn('SpeechRecognition failed, falling back to getUserMedia:', e);
-          startMediaStreamFallback();
+          setMicError('Speech recognition not available.');
         }
       } else {
-        startMediaStreamFallback();
+        setMicError('Speech recognition not supported in this browser.');
       }
-    }
-  };
-
-  const startMediaStreamFallback = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setIsRecording(true);
-      setRecordingSeconds(0);
-      timerRef.current = setInterval(() => {
-        setRecordingSeconds((s) => s + 1);
-      }, 1000);
-
-      setTimeout(() => {
-        stream.getTracks().forEach((track) => track.stop());
-        setIsRecording(false);
-        clearInterval(timerRef.current);
-      }, 5000);
-    } catch (err) {
-      setMicError('Microphone permission required. Please allow microphone access in your browser.');
-      setIsRecording(false);
-      clearInterval(timerRef.current);
     }
   };
 
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (e) {}
-      }
+      if (recognitionRef.current) { try { recognitionRef.current.stop(); } catch (e) {} }
     };
   }, []);
 
@@ -264,7 +198,7 @@ export function HomePage() {
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container animate-fade-in">
       {/* Hero Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
@@ -272,7 +206,11 @@ export function HomePage() {
             <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
               TRANSLARA
             </h1>
-            <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: 'var(--radius-full)', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', border: '1px solid var(--primary-border)' }}>
+            <span style={{
+              fontSize: '11px', fontWeight: 700, padding: '2px 10px',
+              borderRadius: 'var(--radius-full)', background: 'var(--primary-light)',
+              color: 'var(--primary)', border: '1px solid var(--primary-border)',
+            }}>
               AI Multilingual Classroom
             </span>
           </div>
@@ -282,27 +220,19 @@ export function HomePage() {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            className="icon-action-btn"
-            onClick={() => setActiveTab('voice')}
-            style={{ backgroundColor: 'var(--bg-surface)', fontWeight: 600 }}
-          >
+          <Link to="/voice" className="icon-action-btn" style={{ textDecoration: 'none', fontWeight: 600 }}>
             <Radio size={15} color="var(--primary)" />
             <span>Live Speech</span>
-          </button>
-          <button
-            className="icon-action-btn"
-            onClick={() => setActiveTab('video')}
-            style={{ backgroundColor: 'var(--bg-surface)', fontWeight: 600 }}
-          >
-            <Video size={15} color="#7C3AED" />
+          </Link>
+          <Link to="/video" className="icon-action-btn" style={{ textDecoration: 'none', fontWeight: 600 }}>
+            <Video size={15} color="var(--accent-purple)" />
             <span>Video Translate</span>
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* Main Translation Workspace */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
+      <div className="glass-panel" style={{ padding: '26px' }}>
         {/* Language Selection Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '14px', paddingBottom: '16px', borderBottom: '1px solid var(--border-subtle)' }}>
           <LanguageSelector
@@ -312,23 +242,21 @@ export function HomePage() {
             onTargetChange={setTargetLang}
             onSwap={swapLanguages}
           />
-
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span className="model-badge indic">
               <Sparkles size={12} />
               <span>IndicTrans2 NMT</span>
             </span>
             {isSimulatedOffline && (
-              <span className="model-badge" style={{ backgroundColor: 'var(--warning-light)', color: 'var(--warning-text)', borderColor: 'var(--warning-border)' }}>
+              <span className="model-badge" style={{ background: 'var(--warning-light)', color: 'var(--warning-text)', borderColor: 'var(--warning-border)' }}>
                 Offline Cache Active
               </span>
             )}
           </div>
         </div>
 
-        {/* Microphone Notice Alert if error */}
         {micError && (
-          <div className="offline-alert-banner" style={{ marginBottom: '16px', backgroundColor: 'var(--error-light)', borderColor: 'var(--error-border)', color: 'var(--error-text)' }}>
+          <div className="form-error" style={{ marginBottom: '16px' }}>
             <span>{micError}</span>
           </div>
         )}
@@ -340,24 +268,12 @@ export function HomePage() {
             <div className="card-top-bar">
               <span className="card-label-tag">Source Text</span>
               <div style={{ display: 'flex', gap: '6px' }}>
-                <button
-                  className="icon-action-btn"
-                  onClick={handlePaste}
-                  title="Paste from clipboard"
-                  style={{ padding: '4px 8px', fontSize: '12px' }}
-                >
-                  <ClipboardPaste size={13} />
-                  <span>Paste</span>
+                <button className="icon-action-btn" onClick={handlePaste} title="Paste" style={{ padding: '4px 8px', fontSize: '12px' }}>
+                  <ClipboardPaste size={13} /> <span>Paste</span>
                 </button>
                 {inputText && (
-                  <button
-                    className="icon-action-btn"
-                    onClick={() => setInputText('')}
-                    title="Clear text"
-                    style={{ padding: '4px 8px', fontSize: '12px' }}
-                  >
-                    <Trash2 size={13} />
-                    <span>Clear</span>
+                  <button className="icon-action-btn" onClick={() => setInputText('')} title="Clear" style={{ padding: '4px 8px', fontSize: '12px' }}>
+                    <Trash2 size={13} /> <span>Clear</span>
                   </button>
                 )}
               </div>
@@ -390,34 +306,23 @@ export function HomePage() {
                 disabled={isLoading || !inputText.trim()}
               >
                 {isLoading ? (
-                  <>
-                    <span className="dot-flashing" />
-                    <span>Translating...</span>
-                  </>
+                  <><span className="dot-flashing" /><span>Translating...</span></>
                 ) : (
-                  <>
-                    <span>Translate</span>
-                    <ArrowRight size={15} />
-                  </>
+                  <><span>Translate</span><ArrowRight size={15} /></>
                 )}
               </button>
             </div>
           </div>
 
-          {/* SWAP ICON COLUMN */}
+          {/* SWAP */}
           <div className="swap-column">
-            <button
-              className="swap-circle-btn"
-              onClick={swapLanguages}
-              title="Swap Source & Target Languages"
-              aria-label="Swap Languages"
-            >
+            <button className="swap-circle-btn" onClick={swapLanguages} title="Swap Languages" aria-label="Swap Languages">
               ⇄
             </button>
           </div>
 
           {/* TARGET OUTPUT CARD */}
-          <div className="translation-card" style={{ backgroundColor: 'var(--bg-surface-secondary)' }}>
+          <div className="translation-card" style={{ background: 'var(--bg-surface-secondary)' }}>
             <div className="card-top-bar">
               <span className="card-label-tag">Translation Output</span>
               <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600 }}>
@@ -426,9 +331,7 @@ export function HomePage() {
             </div>
 
             <div className="output-text-area">
-              {outputText ? (
-                outputText
-              ) : (
+              {outputText ? outputText : (
                 <span className="output-placeholder">
                   {isLoading ? 'Generating translation...' : 'Translation will appear here...'}
                 </span>
@@ -439,50 +342,27 @@ export function HomePage() {
               <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
                 {outputText ? 'Translated via IndicTrans2' : 'Ready'}
               </span>
-
               <div className="action-buttons-group">
-                <button
-                  className="icon-action-btn"
-                  onClick={handlePlayTTS}
-                  disabled={!outputText}
-                  title="Listen to pronunciation"
-                >
-                  <Volume2 size={15} />
-                  <span>Listen</span>
+                <button className="icon-action-btn" onClick={handlePlayTTS} disabled={!outputText} title="Listen">
+                  <Volume2 size={15} /> <span>Listen</span>
                 </button>
-                <button
-                  className="icon-action-btn"
-                  onClick={handleCopy}
-                  disabled={!outputText}
-                  title="Copy translation"
-                >
+                <button className="icon-action-btn" onClick={handleCopy} disabled={!outputText} title="Copy">
                   {copied ? <Check size={15} color="var(--success)" /> : <Copy size={15} />}
                   <span>{copied ? 'Copied' : 'Copy'}</span>
                 </button>
-                <button
-                  className="icon-action-btn"
-                  onClick={handleSave}
-                  disabled={!outputText}
-                  title="Save to history"
-                >
+                <button className="icon-action-btn" onClick={handleSave} disabled={!outputText} title="Save">
                   <Bookmark size={15} color={saved ? 'var(--primary)' : 'currentColor'} />
                   <span>{saved ? 'Saved' : 'Save'}</span>
                 </button>
-                <button
-                  className="icon-action-btn"
-                  onClick={() => handleTranslate()}
-                  disabled={isLoading || !inputText.trim()}
-                  title="Re-translate"
-                >
-                  <RotateCcw size={14} />
-                  <span>Re-translate</span>
+                <button className="icon-action-btn" onClick={() => handleTranslate()} disabled={isLoading || !inputText.trim()} title="Re-translate">
+                  <RotateCcw size={14} /> <span>Re-translate</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Sample Educational Phrases */}
+        {/* Sample Prompts */}
         <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
           <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>
             Quick Classroom Examples:
@@ -508,91 +388,36 @@ export function HomePage() {
         </div>
       </div>
 
-      {/* Feature Modules Quick Links Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-        <div
-          className="white-card"
-          style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-          onClick={() => setActiveTab('voice')}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--primary)')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-color)')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
-              <Mic size={18} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>Live Speech</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Real-time classroom translation</span>
-            </div>
+      {/* Feature Quick Links */}
+      <div className="feature-cards-grid">
+        <Link to="/voice" className="feature-card">
+          <div className="feature-card-icon" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981' }}>
+            <Mic size={20} />
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-            Zero-jitter streaming audio & dual subtitles for teachers and students.
-          </p>
-        </div>
-
-        <div
-          className="white-card"
-          style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-          onClick={() => setActiveTab('video')}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#7C3AED')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-color)')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7C3AED' }}>
-              <Video size={18} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>Video Translate</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Upload lecture videos</span>
-            </div>
+          <div className="feature-card-title">Live Speech</div>
+          <div className="feature-card-desc">Real-time classroom translation with zero-jitter streaming.</div>
+        </Link>
+        <Link to="/video" className="feature-card">
+          <div className="feature-card-icon" style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)', color: '#8B5CF6' }}>
+            <Video size={20} />
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-            Generate synchronized dual subtitles (SRT/WebVTT) and voice dubbing.
-          </p>
-        </div>
-
-        <div
-          className="white-card"
-          style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-          onClick={() => setActiveTab('chat')}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#0D9488')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-color)')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#CCFBF1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0D9488' }}>
-              <MessageSquare size={18} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>TRANSLARA AI</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Pedagogy assistant</span>
-            </div>
+          <div className="feature-card-title">Video Translate</div>
+          <div className="feature-card-desc">Generate dual subtitles and voice dubbing for lectures.</div>
+        </Link>
+        <Link to="/chat" className="feature-card">
+          <div className="feature-card-icon" style={{ backgroundColor: 'rgba(6, 182, 212, 0.12)', color: '#06B6D4' }}>
+            <MessageSquare size={20} />
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-            Multilingual concept explanations, simplified phrases, and lesson planning.
-          </p>
-        </div>
-
-        <div
-          className="white-card"
-          style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-          onClick={() => setActiveTab('worksheets')}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#EA580C')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-color)')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#FFEDD5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EA580C' }}>
-              <FileText size={18} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>Worksheets</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Grades 1-3 PDFs</span>
-            </div>
+          <div className="feature-card-title">TRANSLARA AI</div>
+          <div className="feature-card-desc">Multilingual concept explanations and lesson planning.</div>
+        </Link>
+        <Link to="/worksheets" className="feature-card">
+          <div className="feature-card-icon" style={{ backgroundColor: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B' }}>
+            <FileText size={20} />
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-            Generate bilingual printable flashcards and literacy & numeracy worksheets.
-          </p>
-        </div>
+          <div className="feature-card-title">Worksheets</div>
+          <div className="feature-card-desc">Bilingual printable flashcards and literacy worksheets.</div>
+        </Link>
       </div>
     </div>
   );

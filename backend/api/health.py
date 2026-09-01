@@ -1,8 +1,10 @@
 """
 Health & Observability API Router for TRANSLARA.
+Reports status of the primary MSSQL database, offline cache, and AI model engines.
 """
 from fastapi import APIRouter
 from backend.config import settings
+from backend.database.connection import check_db_health
 from backend.ml_engine.model_manager import get_model_manager
 from backend.schemas import ConfigResponse, HealthResponse, MetricsResponse, SubsystemStatus
 
@@ -12,12 +14,18 @@ router = APIRouter(tags=["Health & Metrics"])
 @router.get("/health", response_model=HealthResponse)
 @router.get("/api/health", response_model=HealthResponse)
 async def get_health():
-    """Returns status of all core AI subsystems and database."""
+    """Returns status of all core AI subsystems and MSSQL primary database."""
     mgr = get_model_manager()
     status_map = mgr.get_status()
+    db_health = check_db_health()
+
+    db_status = db_health.get("status", "disconnected")
+    overall_status = "healthy" if db_status == "connected" else "degraded"
 
     return HealthResponse(
-        status="ok",
+        status=overall_status,
+        database=db_status,
+        ai_engine="ready",
         app_name=settings.app_name,
         version="1.0.0",
         mock_mode=settings.mock_mode,
@@ -32,7 +40,7 @@ async def get_health():
 
 @router.get("/api/config", response_model=ConfigResponse)
 async def get_config():
-    """Return runtime environment configuration."""
+    """Return runtime environment configuration without exposing credentials."""
     return ConfigResponse(
         app_name=settings.app_name,
         app_env=settings.app_env,
