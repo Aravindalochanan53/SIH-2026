@@ -12,6 +12,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from backend.api import cache, chat, health, languages, pedagogy, translation, video, voice
+from backend.app.api.translation import router as local_translation_router
+from backend.app.api.speech import router as local_speech_router
+from backend.app.api.ner import router as local_ner_router
+from backend.app.api.ai import router as local_ai_router
+from backend.app.models.model_loader import get_local_model_manager
 from backend.auth import router as auth_router
 from backend.cache.database import init_db as init_cache_db
 from backend.cache.seed_cache import seed_all as seed_cache_all
@@ -27,7 +32,7 @@ from backend.pedagogy.fonts import register_all_fonts
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    logger.info("Initializing TRANSLARA Backend Server...")
+    logger.info("Initializing TRANSLARA Backend Server with 100% Local AI Models...")
 
     # 1. Initialize Primary MSSQL Database & Local Offline Cache
     try:
@@ -50,11 +55,17 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Font registration notice: {e}")
 
-    # 3. Warm-up AI Pipeline
+    # 3. Load 100% Local AI Models into Memory
+    try:
+        get_local_model_manager().load_all_models()
+    except Exception as e:
+        logger.warning(f"Local AI model initialization notice: {e}")
+
+    # 4. Warm-up AI Pipeline
     await warm_up()
 
     logger.info(
-        f"TRANSLARA ready! [MOCK_MODE={settings.mock_mode}, DEMO_MODE={settings.demo_mode}]"
+        f"TRANSLARA ready! [100% Local AI Models Active | MOCK_MODE={settings.mock_mode}, DEMO_MODE={settings.demo_mode}]"
     )
     yield
     logger.info("TRANSLARA shutting down.")
@@ -63,7 +74,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI App
 app = FastAPI(
     title="TRANSLARA API",
-    description="Real-Time Multilingual Speech Translation, Video Engine & AI Pedagogy Assistant with MSSQL",
+    description="Real-Time Multilingual Speech Translation, Video Engine & AI Pedagogy Assistant with Local AI Models & MSSQL",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -87,6 +98,12 @@ app.include_router(video.router)
 app.include_router(chat.router)
 app.include_router(pedagogy.router)
 app.include_router(cache.router)
+
+# Register Local AI Routers
+app.include_router(local_translation_router)
+app.include_router(local_speech_router)
+app.include_router(local_ner_router)
+app.include_router(local_ai_router)
 
 
 @app.get("/")

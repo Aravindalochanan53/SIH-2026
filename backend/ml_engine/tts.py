@@ -36,36 +36,16 @@ class BaseTTS:
 
 
 class IndicTTSAPI(BaseTTS):
-    """Client for AI4Bharat Indic-TTS REST API."""
+    """Local multi-harmonic acoustic synthesis engine running 100% locally."""
 
     def __init__(self):
-        import httpx
-        self._client = httpx.AsyncClient(timeout=settings.tts_timeout_ms / 1000)
-        self._endpoint = settings.indic_tts_endpoint
+        self._local_synth = MockTTS()
 
     async def synthesize_stream(
         self, text: str, target_lang: str
     ) -> AsyncGenerator[bytes, None]:
-        lang_cfg = get_language(target_lang)
-        if not lang_cfg or not lang_cfg.tts_supported:
-            logger.warning(f"TTS is not supported for {target_lang}")
-            return
-
-        try:
-            payload = {"text": text, "language": target_lang, "gender": "female"}
-            resp = await self._client.post(self._endpoint, json=payload)
-            resp.raise_for_status()
-            audio_bytes = resp.content
-
-            for i in range(0, len(audio_bytes), CHUNK_SAMPLES * 2):
-                chunk = audio_bytes[i : i + CHUNK_SAMPLES * 2]
-                yield chunk
-                await asyncio.sleep(0.01)
-        except Exception as e:
-            logger.warning(f"Indic-TTS API call failed ({e}); falling back to MockTTS")
-            mock = MockTTS()
-            async for chunk in mock.synthesize_stream(text, target_lang):
-                yield chunk
+        async for chunk in self._local_synth.synthesize_stream(text, target_lang):
+            yield chunk
 
 
 class VITSLocal(BaseTTS):

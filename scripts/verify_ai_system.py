@@ -1,5 +1,7 @@
 """Quick verification script for TRANSLARA AI system."""
 import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.path.insert(0, ".")
 from backend.ml_engine.model_registry import get_model_registry
 

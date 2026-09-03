@@ -1,0 +1,10 @@
+{
+  "model_type": "translation",
+  "model_name": "TRANSLARA-NMT-Local-v1",
+  "architecture": "indictrans2-distilled-320m",
+  "supported_languages": ["ta", "ml", "te", "kn", "hi", "en", "sat", "hoc", "unr", "bn", "mr"],
+  "quantization": "int8",
+  "device": "auto",
+  "version": "1.0.0",
+  "offline_ready": true
+}

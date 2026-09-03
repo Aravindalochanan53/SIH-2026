@@ -18,9 +18,9 @@ quantization: "int8" # Options: "none" | "int8" | "int4"
 # ============================================================
 # DIRECTORY STRUCTURE
 # ============================================================
-model_dir: "models"
+model_dir: "trained_models"
 data_dir: "data"
-checkpoint_dir: "models/checkpoints"
+checkpoint_dir: "trained_models/checkpoints"
 logs_dir: "logs/training"
 eval_reports_dir: "evaluation/reports"
 
@@ -33,8 +33,8 @@ asr:
   # 4-8GB VRAM:       "openai/whisper-small"
   # 16+ GB VRAM:      "openai/whisper-medium" or "openai/whisper-large-v3"
   base_model: "openai/whisper-small"   # Switch to whisper-large-v3 on GPU
-  output_model_name: "TRANSLARA-ASR-v1"
-  output_dir: "models/asr/TRANSLARA-ASR-v1"
+  output_model_name: "TRANSLARA-ASR-Local-v1"
+  output_dir: "trained_models/asr"
 
   # Supported languages for our fine-tuning
   languages:
@@ -98,8 +98,8 @@ translation:
   # GPU 8+: "ai4bharat/indictrans2-indic-en-1B" (requires HF token for gated)
   # Alternatively use facebook/nllb-200-distilled-600M (fully open)
   base_model: "facebook/nllb-200-distilled-600M"  # Fully open, no gate
-  output_model_name: "TRANSLARA-NMT-v1"
-  output_dir: "models/translation/TRANSLARA-NMT-v1"
+  output_model_name: "TRANSLARA-NMT-Local-v1"
+  output_dir: "trained_models/translation"
 
   # Language pairs we are fine-tuning on
   language_pairs:
@@ -163,8 +163,8 @@ translation:
 ner:
   # Base model — XLM-RoBERTa multilingual transformer
   base_model: "xlm-roberta-base"  # Fully open, multilingual
-  output_model_name: "TRANSLARA-NER-v1"
-  output_dir: "models/ner/TRANSLARA-NER-v1"
+  output_model_name: "TRANSLARA-NER-Shield-v1"
+  output_dir: "trained_models/ner"
 
   # Entity classes
   labels:
@@ -224,8 +224,8 @@ tts:
     hoc: null
     unr: null
 
-  output_model_name: "TRANSLARA-TTS-v1"
-  output_dir: "models/tts/TRANSLARA-TTS-v1"
+  output_model_name: "TRANSLARA-TTS-Local-v1"
+  output_dir: "trained_models/tts"
   sampling_rate: 16000
 
   batch_size: 4

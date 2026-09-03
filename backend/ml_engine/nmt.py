@@ -108,61 +108,7 @@ class IndicTrans2Local(BaseNMT):
         )
 
 
-class BhashiniULCA(BaseNMT):
-    """Calls Government of India's Bhashini ULCA inference API."""
-
-    def __init__(self):
-        import httpx
-        self._client = httpx.AsyncClient(timeout=settings.nmt_timeout_ms / 1000)
-        self._has_credentials = bool(settings.bhashini_inference_api_key and settings.bhashini_user_id)
-
-    @retry(stop=stop_after_attempt(2), wait=wait_exponential(multiplier=0.2, max=1.0), reraise=True)
-    async def translate(self, text: str, src_lang: str, tgt_lang: str) -> Translation:
-        if not is_pair_supported(src_lang, tgt_lang):
-            raise UnsupportedLanguagePairError(src_lang, tgt_lang)
-
-        if not self._has_credentials:
-            logger.warning("Bhashini credentials not set; falling back to MockNMT")
-            mock = MockNMT()
-            return await mock.translate(text, src_lang, tgt_lang)
-
-        start = time.monotonic()
-        src_cfg = get_language(src_lang)
-        tgt_cfg = get_language(tgt_lang)
-        if not src_cfg or not tgt_cfg:
-            raise UnsupportedLanguagePairError(src_lang, tgt_lang)
-
-        payload = {
-            "pipelineTasks": [
-                {
-                    "taskType": "translation",
-                    "config": {
-                        "language": {"sourceLanguage": src_cfg.bhashini_code, "targetLanguage": tgt_cfg.bhashini_code},
-                    },
-                }
-            ],
-            "inputData": {"input": [{"source": text}]},
-        }
-        headers = {
-            "Authorization": settings.bhashini_inference_api_key,
-            "userID": settings.bhashini_user_id,
-            "ulcaApiKey": settings.bhashini_ulca_api_key,
-            "Content-Type": "application/json",
-        }
-
-        resp = await self._client.post(settings.bhashini_api_url, json=payload, headers=headers)
-        resp.raise_for_status()
-        data = resp.json()
-        translated = data["pipelineResponse"][0]["output"][0]["target"]
-
-        return Translation(
-            text=translated,
-            src_lang=src_lang,
-            tgt_lang=tgt_lang,
-            latency_ms=(time.monotonic() - start) * 1000,
-            backend="bhashini_ulca",
-            confidence=0.93,
-        )
+# BhashiniULCA removed — 100% Local AI Model Architecture active
 
 
 class MockNMT(BaseNMT):
@@ -429,10 +375,8 @@ def get_nmt_backend() -> BaseNMT:
         if settings.mock_mode:
             logger.info("Using Multilingual MockNMT (MOCK_MODE=True)")
             _nmt_singleton = MockNMT()
-        elif settings.nmt_backend in ("indictrans2", "indictrans2_local"):
+        elif settings.nmt_backend in ("indictrans2", "indictrans2_local", "local_nmt"):
             _nmt_singleton = IndicTrans2Local()
-        elif settings.nmt_backend == "bhashini_ulca":
-            _nmt_singleton = BhashiniULCA()
         else:
             _nmt_singleton = MockNMT()
     return _nmt_singleton

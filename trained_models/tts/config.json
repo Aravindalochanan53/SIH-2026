@@ -1,0 +1,10 @@
+{
+  "model_type": "tts",
+  "model_name": "TRANSLARA-TTS-Local-v1",
+  "architecture": "chunked-acoustic-synthesizer",
+  "chunk_ms": 200,
+  "sample_rate": 16000,
+  "supported_languages": ["ta", "ml", "te", "kn", "hi", "en"],
+  "version": "1.0.0",
+  "offline_ready": true
+}

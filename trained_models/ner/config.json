@@ -1,0 +1,10 @@
+{
+  "model_type": "ner",
+  "model_name": "TRANSLARA-NER-Shield-v1",
+  "architecture": "multilingual-entity-shield-gazetteer",
+  "entity_types": ["PERSON", "NUMBER", "PERCENT", "CURRENCY", "DATE", "LOCATION", "CLASSROOM_TERM"],
+  "supported_languages": ["ta", "ml", "te", "kn", "hi", "en", "sat", "hoc", "unr", "bn", "mr"],
+  "mask_token_format": "⟦ENT{idx}⟧",
+  "version": "1.0.0",
+  "offline_ready": true
+}

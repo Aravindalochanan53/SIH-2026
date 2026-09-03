@@ -12,36 +12,28 @@ from backend.config import settings
 
 
 class IndicConformerProvider(BaseASRProvider):
+    """
+    Local IndicConformer / ASR Provider.
+    Runs locally on CPU/CUDA via Faster-Whisper INT8 engine.
+    """
+
     def __init__(self, endpoint: Optional[str] = None):
-        self.endpoint = endpoint or settings.indic_conformer_endpoint
+        from backend.ai.asr.faster_whisper_provider import FasterWhisperASRProvider
+        self._local_provider = FasterWhisperASRProvider()
 
     async def transcribe(self, pcm16_bytes: bytes, hint_language: Optional[str] = None) -> ASRResult:
-        import httpx
-        start = time.monotonic()
-        try:
-            async with httpx.AsyncClient(timeout=settings.asr_timeout_ms / 1000) as client:
-                resp = await client.post(
-                    self.endpoint,
-                    content=pcm16_bytes,
-                    headers={"Content-Type": "audio/x-raw", "X-Language": hint_language or "ta"},
-                )
-                resp.raise_for_status()
-                data = resp.json()
-                return ASRResult(
-                    text=data.get("text", ""),
-                    language=data.get("language", hint_language or "ta"),
-                    confidence=data.get("confidence", 0.92),
-                    latency_ms=(time.monotonic() - start) * 1000,
-                    backend="indic_conformer",
-                )
-        except Exception as e:
-            logger.warning(f"IndicConformer endpoint unavailable ({e}); using fallback.")
-            from backend.ai.asr.mock_provider import MockASRProvider
-            mock = MockASRProvider()
-            return await mock.transcribe(pcm16_bytes, hint_language)
+        res = await self._local_provider.transcribe(pcm16_bytes, language=hint_language)
+        return ASRResult(
+            text=res.text,
+            language=res.detected_language or hint_language or "ta",
+            confidence=res.confidence,
+            latency_ms=res.latency_ms,
+            backend="local_asr",
+        )
 
     async def detect_language(self, pcm16_bytes: bytes) -> str:
-        return "ta"
+        res = await self._local_provider.transcribe(pcm16_bytes)
+        return res.detected_language or "ta"
 
 
 class MMSProvider(BaseASRProvider):

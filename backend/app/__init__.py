@@ -1,0 +1,3 @@
+"""
+TRANSLARA Backend App Package.
+"""

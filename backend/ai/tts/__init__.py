@@ -1,15 +1,15 @@
 from backend.ai.tts.base import BaseTTSProvider
 from backend.ai.tts.indic_tts_provider import (
-    BhashiniTTSProvider,
+    LocalAcousticTTSProvider,
     IndicTTSProvider,
     MockTTSProvider,
-    VITSLocalProvider,
+    get_tts_engine,
 )
 
 __all__ = [
     "BaseTTSProvider",
+    "LocalAcousticTTSProvider",
     "IndicTTSProvider",
-    "VITSLocalProvider",
-    "BhashiniTTSProvider",
     "MockTTSProvider",
+    "get_tts_engine",
 ]

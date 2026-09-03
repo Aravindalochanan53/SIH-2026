@@ -95,7 +95,7 @@ python scripts/seed_database.py
 
 # 6. Start FastAPI server
 $env:PYTHONPATH="."
-python -m uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 FastAPI server runs on: `http://localhost:8000`
 - Interactive OpenAPI Docs: `http://localhost:8000/docs`

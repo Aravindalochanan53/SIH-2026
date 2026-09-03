@@ -105,38 +105,16 @@ class FasterWhisperASR(BaseASR):
 
 
 class IndicConformerASR(BaseASR):
-    """Remote inference call to a self-hosted IndicConformer service."""
+    """Local IndicConformer / Faster-Whisper ASR engine running 100% locally."""
 
     def __init__(self):
-        import httpx
-        self._client = httpx.AsyncClient(timeout=settings.asr_timeout_ms / 1000)
-        self._endpoint = settings.indic_conformer_endpoint
+        self._local_fw = FasterWhisperASR()
 
     async def transcribe(self, pcm16_bytes: bytes, hint_language: Optional[str] = None) -> Transcript:
-        start = time.monotonic()
-        lang_code = hint_language or "ta"
-        try:
-            resp = await self._client.post(
-                self._endpoint,
-                content=pcm16_bytes,
-                headers={"Content-Type": "audio/pcm", "X-Language-Hint": lang_code},
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            return Transcript(
-                text=data.get("text", ""),
-                language=data.get("language", lang_code),
-                confidence=float(data.get("confidence", 0.8)),
-                latency_ms=(time.monotonic() - start) * 1000,
-                backend="indic_conformer",
-            )
-        except Exception as e:
-            logger.warning(f"IndicConformer ASR unavailable ({e}); falling back")
-            mock = MockASR()
-            return await mock.transcribe(pcm16_bytes, hint_language)
+        return await self._local_fw.transcribe(pcm16_bytes, hint_language=hint_language)
 
     async def detect_language(self, pcm16_bytes: bytes) -> str:
-        return "ta"
+        return await self._local_fw.detect_language(pcm16_bytes)
 
 
 class MMSASR(BaseASR):

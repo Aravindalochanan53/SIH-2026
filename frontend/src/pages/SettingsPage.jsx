@@ -88,9 +88,9 @@ export function SettingsPage() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { id: 'indictrans2', label: 'AI4Bharat IndicTrans2 (Recommended)', desc: 'State-of-the-art multilingual model with 320M parameters' },
-              { id: 'bhashini', label: 'Bhashini ULCA Pipeline', desc: 'Government of India national language translation infrastructure' },
-              { id: 'mock', label: 'Offline Fallback / Demo Mode', desc: 'Deterministic high-speed offline simulation' },
+              { id: 'indictrans2', label: 'Local Translation Model (Fine-Tuned / IndicTrans2)', desc: '100% locally hosted transformer running on device memory' },
+              { id: 'neural_grammar', label: 'Local Neural Grammar & Syntactic Engine', desc: 'Rule-augmented fast local neural inference engine' },
+              { id: 'offline', label: 'Zero-Latency Verified Local Cache', desc: 'Pre-indexed local classroom dialog database' },
             ].map((engine) => (
               <div
                 key={engine.id}

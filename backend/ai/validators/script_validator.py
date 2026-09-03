@@ -68,3 +68,22 @@ def detect_dominant_script(text: str) -> Optional[str]:
 
     best_lang, best_score = max(scores.items(), key=lambda x: x[1])
     return best_lang if best_score >= 0.40 else None
+
+
+class ScriptValidationResult:
+    def __init__(self, is_valid: bool, purity_ratio: float, detected_script: Optional[str] = None):
+        self.is_valid = is_valid
+        self.purity_ratio = purity_ratio
+        self.detected_script = detected_script
+
+
+class ScriptValidator:
+    """Validator wrapper for script purity checks."""
+
+    @staticmethod
+    def validate(text: str, expected_lang: str, min_purity: float = 0.50) -> ScriptValidationResult:
+        purity = calculate_script_purity(text, expected_lang)
+        is_valid = purity >= min_purity
+        dom = detect_dominant_script(text)
+        return ScriptValidationResult(is_valid=is_valid, purity_ratio=purity, detected_script=dom)
+

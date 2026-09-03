@@ -1,0 +1,11 @@
+{
+  "model_type": "asr",
+  "model_name": "TRANSLARA-ASR-Local-v1",
+  "architecture": "faster-whisper-ctranslate2",
+  "whisper_size": "small",
+  "compute_type": "int8",
+  "sampling_rate": 16000,
+  "supported_languages": ["ta", "ml", "te", "kn", "hi", "en", "sat"],
+  "version": "1.0.0",
+  "offline_ready": true
+}

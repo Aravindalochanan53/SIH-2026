@@ -11,7 +11,6 @@ from loguru import logger
 
 from backend.ai.ner.entity_lock import get_entity_lock
 from backend.ai.translation.base import BaseTranslationProvider, TranslationResult
-from backend.ai.translation.bhashini_provider import BhashiniProvider
 from backend.ai.translation.hybrid_pivot import PivotTranslationEngine
 from backend.ai.translation.indictrans2_provider import IndicTrans2Provider
 from backend.ai.translation.offline_provider import OfflineTranslationProvider
@@ -23,10 +22,10 @@ from backend.ml_engine.languages import is_pair_supported
 
 class TranslationEngine:
     """
-    Modular Translation Orchestrator.
+    Modular Translation Orchestrator for 100% Local AI Models.
     Pipeline:
     1. Entity Recognition & Masking
-    2. Model Provider Inference (IndicTrans2 / Bhashini / Neural Grammar AI / Offline / Pivot)
+    2. Local Model Provider Inference (IndicTrans2 / Neural Grammar AI / Offline / Pivot)
     3. Entity Restoration
     4. Translation & Script Validation
     """
@@ -34,7 +33,6 @@ class TranslationEngine:
     def __init__(self):
         self.entity_lock = get_entity_lock()
         self.indictrans2 = IndicTrans2Provider()
-        self.bhashini = BhashiniProvider()
         self.offline = OfflineTranslationProvider()
         self.pivot = PivotTranslationEngine()
         self.neural_grammar = NeuralGrammarTranslationEngine()
@@ -68,13 +66,15 @@ class TranslationEngine:
         selected_backend = preferred_engine or settings.nmt_backend
         provider: BaseTranslationProvider
 
-        # Low-resource tribal routing (Santhali, Ho, Mundari)
-        if tgt in ("sat", "hoc", "unr") or src in ("sat", "hoc", "unr"):
+        from backend.ai.translation.code_mixed_normalizer import is_sentence_code_mixed
+        if is_sentence_code_mixed(text) or src in ("mixed", "auto"):
+            provider = self.neural_grammar
+        elif tgt in ("sat", "hoc", "unr") or src in ("sat", "hoc", "unr"):
             provider = self.pivot
-        elif selected_backend == "bhashini_ulca" and self.bhashini.is_pair_supported(src, tgt):
-            provider = self.bhashini
-        elif selected_backend in ("indictrans2", "indictrans2_local") and self.indictrans2.is_pair_supported(src, tgt) and self.indictrans2._ready:
+        elif selected_backend in ("indictrans2", "indictrans2_local", "local_nmt") and self.indictrans2.is_pair_supported(src, tgt) and self.indictrans2._ready:
             provider = self.indictrans2
+        elif selected_backend == "offline":
+            provider = self.offline
         else:
             provider = self.neural_grammar
 

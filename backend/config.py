@@ -60,26 +60,18 @@ class Settings(BaseSettings):
     source_language: str = "ta"
     default_target_language: str = "ml"
 
-    # ASR Configuration (Multilingual Faster-Whisper, IndicConformer, MMS, Mock)
-    asr_backend: Literal["faster_whisper", "indic_conformer", "mms", "mock"] = "faster_whisper"
+    # Local ASR Configuration (Faster-Whisper INT8 / Custom Local Model)
+    asr_backend: Literal["local_asr", "faster_whisper", "indic_conformer", "mock"] = "local_asr"
     whisper_model_size: str = "small"
     whisper_device: str = "cpu"
     whisper_compute_type: str = "int8"
-    indic_conformer_endpoint: str = "http://localhost:8500/infer"
-    mms_model_id: str = "facebook/mms-1b-all"
 
-    # NMT Configuration (Generic Source -> Target, IndicTrans2 / Bhashini)
-    nmt_backend: Literal["indictrans2", "indictrans2_local", "bhashini_ulca", "mock"] = "indictrans2"
+    # Local NMT Configuration (Local Fine-Tuned Model / IndicTrans2 / Neural Grammar)
+    nmt_backend: Literal["local_nmt", "indictrans2", "neural_grammar", "offline", "mock"] = "local_nmt"
     indictrans2_model_id: str = "ai4bharat/indictrans2-indic-indic-dist-320M"
-    bhashini_user_id: str = ""
-    bhashini_ulca_api_key: str = ""
-    bhashini_inference_api_key: str = ""
-    bhashini_pipeline_id: str = "64392f96daac500b55c543cd"
-    bhashini_api_url: str = "https://dhruva-api.bhashini.gov.in/services/inference/pipeline"
 
-    # TTS Configuration (Multilingual Indic-TTS / VITS / Mock)
-    tts_backend: Literal["indic_tts", "vits_local", "indic_tts_api", "mock"] = "indic_tts"
-    indic_tts_endpoint: str = "https://api.indictts.example.org/synthesize"
+    # Local TTS Configuration (Local Acoustic Synthesis / VITS)
+    tts_backend: Literal["local_tts", "indic_tts", "vits_local", "mock"] = "local_tts"
     tts_chunk_ms: int = 200
 
     # VAD Configuration
@@ -105,7 +97,12 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,chrome-extension://*"
     websocket_max_message_size: int = 5242880  # 5MB
 
-    # Storage Paths
+    # Storage Paths & Local Trained Model Directories
+    trained_models_dir: str = str(BASE_DIR / "trained_models")
+    trained_translation_model_dir: str = str(BASE_DIR / "trained_models" / "translation")
+    trained_asr_model_dir: str = str(BASE_DIR / "trained_models" / "asr")
+    trained_ner_model_dir: str = str(BASE_DIR / "trained_models" / "ner")
+    trained_tts_model_dir: str = str(BASE_DIR / "trained_models" / "tts")
     model_cache_dir: str = str(BASE_DIR / "models")
     audio_cache_dir: str = str(BASE_DIR / "backend" / "assets" / "translara_audio")
     pdf_output_dir: str = str(BASE_DIR / "backend" / "assets" / "translara_pdfs")
@@ -130,30 +127,34 @@ class Settings(BaseSettings):
         Construct or return the SQLAlchemy connection URL.
         Priority:
         1. Explicit DATABASE_URL if configured.
-        2. MSSQL connection string built from DB_* parameters.
+        2. MSSQL connection string built from DB_* parameters using odbc_connect.
         3. Local fallback SQLite cache URL.
         """
         if self.database_url and self.database_url.strip():
             return self.database_url.strip()
 
-        # If user provided DB_USER or DB_SERVER
-        if self.db_user and self.db_password:
-            driver_str = urllib.parse.quote_plus(self.db_driver)
+        if self.db_server and self.db_server.lower() not in ("none", ""):
             trust_cert = "yes" if self.db_trust_server_certificate else "no"
-            user_enc = urllib.parse.quote_plus(self.db_user)
-            pwd_enc = urllib.parse.quote_plus(self.db_password)
-            return (
-                f"mssql+pyodbc://{user_enc}:{pwd_enc}@{self.db_server}:{self.db_port}/{self.db_name}"
-                f"?driver={driver_str}&TrustServerCertificate={trust_cert}"
-            )
-        elif self.db_server and self.db_server.lower() not in ("none", ""):
-            # Trusted Windows Authentication (no user/password)
-            driver_str = urllib.parse.quote_plus(self.db_driver)
-            trust_cert = "yes" if self.db_trust_server_certificate else "no"
-            return (
-                f"mssql+pyodbc://@{self.db_server}:{self.db_port}/{self.db_name}"
-                f"?driver={driver_str}&Trusted_Connection=yes&TrustServerCertificate={trust_cert}"
-            )
+            driver_name = self.db_driver.strip("{}")
+            if self.db_user and self.db_password:
+                odbc_str = (
+                    f"Driver={{{driver_name}}};"
+                    f"Server={self.db_server};"
+                    f"Database={self.db_name};"
+                    f"UID={self.db_user};"
+                    f"PWD={self.db_password};"
+                    f"TrustServerCertificate={trust_cert};"
+                )
+            else:
+                odbc_str = (
+                    f"Driver={{{driver_name}}};"
+                    f"Server={self.db_server};"
+                    f"Database={self.db_name};"
+                    f"Trusted_Connection=yes;"
+                    f"TrustServerCertificate={trust_cert};"
+                )
+            params = urllib.parse.quote_plus(odbc_str)
+            return f"mssql+pyodbc:///?odbc_connect={params}"
 
         return self.offline_db_url
 
@@ -161,5 +162,15 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # Ensure directories exist
-for p in [settings.audio_cache_dir, settings.pdf_output_dir, settings.fonts_dir, str(BASE_DIR / "data")]:
+for p in [
+    settings.trained_models_dir,
+    settings.trained_translation_model_dir,
+    settings.trained_asr_model_dir,
+    settings.trained_ner_model_dir,
+    settings.trained_tts_model_dir,
+    settings.audio_cache_dir,
+    settings.pdf_output_dir,
+    settings.fonts_dir,
+    str(BASE_DIR / "data"),
+]:
     Path(p).mkdir(parents=True, exist_ok=True)

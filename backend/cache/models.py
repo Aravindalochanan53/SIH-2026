@@ -4,7 +4,7 @@ SQLAlchemy ORM Data Models for TRANSLARA.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text, Unicode, UnicodeText
 from backend.cache.database import Base
 
 
@@ -22,9 +22,9 @@ class Phrase(Base):
     category = Column(String(64), index=True, nullable=False, default="general")
     source_language = Column(String(10), index=True, nullable=False, default="ta")
     target_language = Column(String(10), index=True, nullable=False, default="ml")
-    source_text = Column(Text, nullable=False)
-    target_text = Column(Text, nullable=False)
-    pronunciation = Column(Text, default="")
+    source_text = Column(UnicodeText, nullable=False)
+    target_text = Column(UnicodeText, nullable=False)
+    pronunciation = Column(UnicodeText, default="")
     verified = Column(Boolean, default=False, nullable=False)
     translation_status = Column(String(32), default="NEEDS_REVIEW", nullable=False)
     audio_path = Column(String(256), nullable=True)
@@ -40,10 +40,10 @@ class EntityRecord(Base):
     __tablename__ = "entities"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(128), unique=True, index=True, nullable=False)
+    name = Column(Unicode(128), unique=True, index=True, nullable=False)
     kind = Column(String(32), nullable=False, default="PERSON")
     language = Column(String(10), nullable=True, default="all")
-    phonetic_hint = Column(String(128), nullable=True)
+    phonetic_hint = Column(Unicode(128), nullable=True)
     created_at = Column(DateTime, default=_utc_now, nullable=False)
 
 
