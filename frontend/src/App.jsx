@@ -11,8 +11,6 @@ import { VoiceTranslatorPage } from './pages/VoiceTranslatorPage';
 import { VideoTranslatorPage } from './pages/VideoTranslatorPage';
 import { ChatbotPage } from './pages/ChatbotPage';
 import { LiveMeetingPage } from './pages/LiveMeetingPage';
-import { LearningPage } from './pages/LearningPage';
-import { WorksheetsPage } from './pages/WorksheetsPage';
 import { OfflinePage } from './pages/OfflinePage';
 import { HistoryPage } from './pages/HistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -84,16 +82,8 @@ export default function App() {
           <AppShell><LiveMeetingPage /></AppShell>
         </PrivateRoute>
       } />
-      <Route path="/learning" element={
-        <PrivateRoute>
-          <AppShell><LearningPage /></AppShell>
-        </PrivateRoute>
-      } />
-      <Route path="/worksheets" element={
-        <PrivateRoute>
-          <AppShell><WorksheetsPage /></AppShell>
-        </PrivateRoute>
-      } />
+      <Route path="/learning" element={<Navigate to="/translate" replace />} />
+      <Route path="/worksheets" element={<Navigate to="/translate" replace />} />
       <Route path="/offline" element={
         <PrivateRoute>
           <AppShell><OfflinePage /></AppShell>

@@ -282,30 +282,42 @@ def run_training(config: Dict, device: str, args: argparse.Namespace):
 
     data_collator = DataCollatorSpeechSeq2SeqWithPadding(processor=processor)
 
-    # Training arguments (CPU-optimized defaults)
     fp16 = config.get("fp16", False) and device == "cuda"
-    training_args = Seq2SeqTrainingArguments(
-        output_dir=output_dir,
-        num_train_epochs=num_epochs,
-        per_device_train_batch_size=asr_cfg["batch_size"],
-        per_device_eval_batch_size=asr_cfg["eval_batch_size"],
-        gradient_accumulation_steps=asr_cfg["gradient_accumulation_steps"],
-        learning_rate=asr_cfg["learning_rate"],
-        warmup_steps=asr_cfg["warmup_steps"],
-        fp16=fp16,
-        evaluation_strategy="steps",
-        eval_steps=asr_cfg["eval_steps"],
-        save_strategy="steps",
-        save_steps=asr_cfg["save_steps"],
-        logging_steps=asr_cfg["logging_steps"],
-        load_best_model_at_end=True,
-        metric_for_best_model="wer",
-        greater_is_better=False,
-        predict_with_generate=True,
-        generation_max_length=225,
-        report_to="none",
-        resume_from_checkpoint=args.resume or asr_cfg.get("resume_from_checkpoint"),
-    )
+    import inspect
+    sig = inspect.signature(Seq2SeqTrainingArguments.__init__)
+    eval_arg = "eval_strategy" if "eval_strategy" in sig.parameters else "evaluation_strategy"
+    strat = "epoch" if num_epochs <= 5 else "steps"
+
+    training_kwargs = {
+        "output_dir": output_dir,
+        "num_train_epochs": num_epochs,
+        "per_device_train_batch_size": asr_cfg["batch_size"],
+        "per_device_eval_batch_size": asr_cfg["eval_batch_size"],
+        "gradient_accumulation_steps": asr_cfg["gradient_accumulation_steps"],
+        "learning_rate": asr_cfg["learning_rate"],
+        "warmup_steps": asr_cfg["warmup_steps"],
+        "fp16": fp16,
+        eval_arg: strat,
+        "save_strategy": strat,
+        "logging_steps": asr_cfg["logging_steps"],
+        "load_best_model_at_end": True,
+        "metric_for_best_model": "wer",
+        "greater_is_better": False,
+        "predict_with_generate": True,
+        "generation_max_length": 225,
+        "report_to": "none",
+        "resume_from_checkpoint": args.resume or asr_cfg.get("resume_from_checkpoint"),
+    }
+    if strat == "steps":
+        training_kwargs["eval_steps"] = asr_cfg["eval_steps"]
+        training_kwargs["save_steps"] = asr_cfg["save_steps"]
+
+    valid_params = inspect.signature(Seq2SeqTrainingArguments.__init__).parameters
+    filtered_kwargs = {k: v for k, v in training_kwargs.items() if k in valid_params}
+    training_args = Seq2SeqTrainingArguments(**filtered_kwargs)
+
+    trainer_sig = inspect.signature(Seq2SeqTrainer.__init__)
+    tok_kw = {"processing_class": processor.feature_extractor} if "processing_class" in trainer_sig.parameters else {"tokenizer": processor.feature_extractor}
 
     trainer = Seq2SeqTrainer(
         model=model,
@@ -314,7 +326,7 @@ def run_training(config: Dict, device: str, args: argparse.Namespace):
         eval_dataset=val_dataset,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
-        tokenizer=processor.feature_extractor,
+        **tok_kw,
     )
 
     logger.info("[ASR-Train] 🚀 Starting Whisper fine-tuning...")

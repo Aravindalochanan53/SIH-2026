@@ -45,10 +45,10 @@ export function OfflinePage() {
           </div>
           <div>
             <h1 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              Offline Classroom Phrase Library
+              Offline Translation Phrase Library
             </h1>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: 0 }}>
-              Verified educational phrases stored locally in SQLite database for zero-latency offline operation
+              Verified multilingual translation phrases stored locally in SQLite database for zero-latency offline operation
             </p>
           </div>
         </div>

@@ -35,6 +35,8 @@ class FasterWhisperProvider(BaseASRProvider):
             if self.device == "auto":
                 self.device = "cuda" if torch.cuda.is_available() else "cpu"
                 self.compute_type = "float16" if self.device == "cuda" else "int8"
+            elif self.device == "cuda" and (self.compute_type in ("int8", None)):
+                self.compute_type = "float16"
 
             from faster_whisper import WhisperModel
             logger.info(f"Loading Faster-Whisper ({self.model_size}) on device={self.device} compute={self.compute_type}")

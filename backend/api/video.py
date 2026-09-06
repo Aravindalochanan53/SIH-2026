@@ -30,7 +30,7 @@ class DemoVideoRequest(BaseModel):
 
 
 @router.post("/upload")
-async def upload_video(
+def upload_video(
     file: UploadFile = File(...),
     source_lang: str = Form("ta"),
     target_lang: str = Form("ml"),
@@ -46,7 +46,7 @@ async def upload_video(
             detail=f"Unsupported format '{ext}'. Supported: MP4, WebM, MOV, MKV",
         )
 
-    file_bytes = await file.read()
+    file_bytes = file.file.read()
     video_service = get_video_service()
     job = video_service.create_job(
         file_bytes=file_bytes,
@@ -63,7 +63,7 @@ async def upload_video(
             original_filename=file.filename or "video.mp4",
             source_language=source_lang,
             target_language=target_lang,
-            input_path=str(job.original_video_path) if hasattr(job, "original_video_path") else None,
+            input_path=str(job.input_video_path) if job.input_video_path else None,
             user_id=user.id if user else None,
         )
     except Exception:
@@ -73,7 +73,7 @@ async def upload_video(
 
 
 @router.post("/translate")
-async def start_video_translation(
+def start_video_translation(
     req: VideoTranslateRequest,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
@@ -137,7 +137,7 @@ async def trigger_demo_video(
 
 
 @router.get("/status/{job_id}")
-async def get_video_status(job_id: str):
+def get_video_status(job_id: str):
     """Poll video translation status and progress."""
     video_service = get_video_service()
     job = video_service.get_job(job_id)
@@ -175,12 +175,141 @@ async def get_subtitles(job_id: str, format: str = "vtt", mode: str = "dual"):
         return Response(content=content, media_type="text/vtt; charset=utf-8")
 
 
-@router.get("/history")
-async def list_video_history(
-    db: Session = Depends(get_db),
-    user: Optional[User] = Depends(get_optional_user),
-):
-    """List all translated videos and active jobs from MSSQL and cache."""
+@router.get("/stream/{job_id}")
+@router.get("/stream/{job_id}/{video_type}")
+async def stream_video(job_id: str, video_type: str = "translated"):
+    """Stream original or translated video for web playback."""
     video_service = get_video_service()
-    mem_jobs = video_service.list_jobs()
-    return [j.to_dict() for j in mem_jobs]
+    job = video_service.get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Video job not found")
+
+    target_path = job.output_video_path if video_type == "translated" and job.output_video_path else job.input_video_path
+    if not target_path or not Path(target_path).exists():
+        if job.input_video_path and Path(job.input_video_path).exists():
+            target_path = job.input_video_path
+        else:
+            raise HTTPException(status_code=404, detail="Video media file not found")
+
+    return FileResponse(
+        path=target_path,
+        media_type="video/mp4",
+        filename=Path(target_path).name,
+    )
+
+
+@router.get("/audio/{job_id}/translated")
+async def stream_translated_audio(job_id: str):
+    """Stream synthesized translated voice audio for the video."""
+    video_service = get_video_service()
+    job = video_service.get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Video job not found")
+
+    if job.translated_audio_path and Path(job.translated_audio_path).exists():
+        return FileResponse(
+            path=job.translated_audio_path,
+            media_type="audio/mpeg",
+            filename=f"{job_id}_translated_voice.mp3",
+        )
+    raise HTTPException(status_code=404, detail="Translated voice audio track not found")
+
+
+@router.get("/audio/{job_id}/segment/{index}")
+async def stream_segment_audio(job_id: str, index: int):
+    """Stream synthesized translated voice audio for a specific segment."""
+    video_service = get_video_service()
+    job = video_service.get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Video job not found")
+
+    from backend.config import settings
+    job_dir = Path(settings.data_dir) / "videos" / job_id
+    seg_file = job_dir / f"seg_voice_{index}.mp3"
+    if seg_file.exists():
+        return FileResponse(
+            path=str(seg_file),
+            media_type="audio/mpeg",
+            filename=f"segment_{index}_voice.mp3",
+        )
+    raise HTTPException(status_code=404, detail="Segment audio not found")
+
+
+@router.get("/download/{job_id}/{format}")
+async def download_video_assets(job_id: str, format: str):
+    """Download translated video file or subtitles (srt, vtt, mp4)."""
+    video_service = get_video_service()
+    job = video_service.get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Video job not found")
+
+    fmt = format.lower()
+    if fmt == "srt":
+        if not job.subtitle_srt_path or not Path(job.subtitle_srt_path).exists():
+            from backend.services.subtitle_service import SubtitleSegment
+            sub_segs = [
+                SubtitleSegment(
+                    index=s["index"],
+                    start_seconds=s["start_seconds"],
+                    end_seconds=s["end_seconds"],
+                    source_text=s["source_text"],
+                    target_text=s.get("target_text", s.get("translated_text", "")),
+                )
+                for s in job.segments
+            ]
+            content = generate_srt(sub_segs, mode="dual")
+            return Response(
+                content=content,
+                media_type="application/x-subrip",
+                headers={"Content-Disposition": f'attachment; filename="{job_id}_subtitles.srt"'},
+            )
+        return FileResponse(
+            path=job.subtitle_srt_path,
+            filename=f"{job_id}_subtitles.srt",
+            media_type="application/x-subrip",
+        )
+
+    elif fmt == "vtt":
+        if not job.subtitle_vtt_path or not Path(job.subtitle_vtt_path).exists():
+            from backend.services.subtitle_service import SubtitleSegment
+            sub_segs = [
+                SubtitleSegment(
+                    index=s["index"],
+                    start_seconds=s["start_seconds"],
+                    end_seconds=s["end_seconds"],
+                    source_text=s["source_text"],
+                    target_text=s.get("target_text", s.get("translated_text", "")),
+                )
+                for s in job.segments
+            ]
+            content = generate_webvtt(sub_segs, mode="dual")
+            return Response(
+                content=content,
+                media_type="text/vtt",
+                headers={"Content-Disposition": f'attachment; filename="{job_id}_subtitles.vtt"'},
+            )
+        return FileResponse(
+            path=job.subtitle_vtt_path,
+            filename=f"{job_id}_subtitles.vtt",
+            media_type="text/vtt",
+        )
+
+    elif fmt in ("mp4", "video"):
+        path = job.output_video_path if job.output_video_path and Path(job.output_video_path).exists() else job.input_video_path
+        if not path or not Path(path).exists():
+            raise HTTPException(status_code=404, detail="Video file not available for download")
+        return FileResponse(
+            path=path,
+            filename=f"{job_id}_translated.mp4",
+            media_type="video/mp4",
+        )
+
+    raise HTTPException(status_code=400, detail=f"Unsupported download format: {format}")
+
+
+@router.get("/history")
+def list_video_history():
+    """List all translated videos and active jobs with instant response."""
+    video_service = get_video_service()
+    jobs = video_service.list_jobs()
+    return [j.to_dict() for j in jobs]

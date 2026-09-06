@@ -11,6 +11,7 @@ from loguru import logger
 
 from backend.ai.ner.entity_lock import get_entity_lock
 from backend.ai.translation.base import BaseTranslationProvider, TranslationResult
+from backend.ai.translation.google_api_provider import get_google_provider
 from backend.ai.translation.hybrid_pivot import PivotTranslationEngine
 from backend.ai.translation.indictrans2_provider import IndicTrans2Provider
 from backend.ai.translation.offline_provider import OfflineTranslationProvider
@@ -22,16 +23,17 @@ from backend.ml_engine.languages import is_pair_supported
 
 class TranslationEngine:
     """
-    Modular Translation Orchestrator for 100% Local AI Models.
+    Modular Translation Orchestrator for Local & API Translation.
     Pipeline:
     1. Entity Recognition & Masking
-    2. Local Model Provider Inference (IndicTrans2 / Neural Grammar AI / Offline / Pivot)
+    2. Model / API Provider Inference
     3. Entity Restoration
     4. Translation & Script Validation
     """
 
     def __init__(self):
         self.entity_lock = get_entity_lock()
+        self.google_api = get_google_provider()
         self.indictrans2 = IndicTrans2Provider()
         self.offline = OfflineTranslationProvider()
         self.pivot = PivotTranslationEngine()
@@ -67,7 +69,9 @@ class TranslationEngine:
         provider: BaseTranslationProvider
 
         from backend.ai.translation.code_mixed_normalizer import is_sentence_code_mixed
-        if is_sentence_code_mixed(text) or src in ("mixed", "auto"):
+        if selected_backend in ("google_api", "api", "online"):
+            provider = self.google_api
+        elif is_sentence_code_mixed(text) or src in ("mixed", "auto"):
             provider = self.neural_grammar
         elif tgt in ("sat", "hoc", "unr") or src in ("sat", "hoc", "unr"):
             provider = self.pivot
@@ -76,7 +80,7 @@ class TranslationEngine:
         elif selected_backend == "offline":
             provider = self.offline
         else:
-            provider = self.neural_grammar
+            provider = self.google_api
 
         # 3. Perform Inference
         raw_result = await provider.translate(masked_text, src, tgt)
@@ -84,11 +88,11 @@ class TranslationEngine:
         # 4. Unmask Entities
         restored_text = self.entity_lock.unmask(raw_result.text, token_map)
 
-        # Fallback check: If raw output echoed source text, translate via neural grammar engine
+        # Fallback check: If raw output echoed source text, translate via Google API
         if restored_text.strip() == text.strip() and src != tgt:
-            ng_result = await self.neural_grammar.translate(masked_text, src, tgt)
-            restored_text = self.entity_lock.unmask(ng_result.text, token_map)
-            raw_result = ng_result
+            api_result = await self.google_api.translate(masked_text, src, tgt)
+            restored_text = self.entity_lock.unmask(api_result.text, token_map)
+            raw_result = api_result
 
         # 5. Validate Quality & Script Integrity
         expected_ents = [e.text for e in detected_entities]

@@ -10,13 +10,14 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from backend.config import settings
 
 # Ensure sqlite parent directory exists
-if settings.database_url.startswith("sqlite:///"):
-    db_path = settings.database_url.replace("sqlite:///", "")
+cache_url = settings.offline_db_url
+if cache_url.startswith("sqlite:///"):
+    db_path = cache_url.replace("sqlite:///", "")
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
 
 engine = create_engine(
-    settings.database_url,
-    connect_args={"check_same_thread": False} if settings.database_url.startswith("sqlite") else {},
+    cache_url,
+    connect_args={"check_same_thread": False} if cache_url.startswith("sqlite") else {},
     echo=False,
 )
 

@@ -3,7 +3,7 @@
  */
 import { request, setAuthToken } from './client';
 
-export async function registerUser({ name, email, password, role = 'teacher', preferred_source_lang = 'ta', preferred_target_lang = 'ml' }) {
+export async function registerUser({ name, email, password, role = 'user', preferred_source_lang = 'ta', preferred_target_lang = 'ml' }) {
   const data = await request('/api/auth/register', {
     method: 'POST',
     body: JSON.stringify({

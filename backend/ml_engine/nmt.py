@@ -54,9 +54,16 @@ class IndicTrans2Local(BaseNMT):
             import torch
             from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
-            logger.info(f"Loading IndicTrans2 model: {settings.indictrans2_model_id}")
+            self._device = "cuda" if torch.cuda.is_available() else "cpu"
+            self._dtype = torch.float16 if self._device == "cuda" else torch.float32
+
+            logger.info(f"Loading IndicTrans2 model: {settings.indictrans2_model_id} on {self._device} ({self._dtype})")
             self._tokenizer = AutoTokenizer.from_pretrained(settings.indictrans2_model_id, trust_remote_code=True)
-            self._model = AutoModelForSeq2SeqLM.from_pretrained(settings.indictrans2_model_id, trust_remote_code=True)
+            self._model = AutoModelForSeq2SeqLM.from_pretrained(
+                settings.indictrans2_model_id,
+                trust_remote_code=True,
+                torch_dtype=self._dtype,
+            ).to(self._device)
             self._model.eval()
             self._torch = torch
             self._ready = True
@@ -86,6 +93,8 @@ class IndicTrans2Local(BaseNMT):
         def _run():
             tagged_input = f"{src_tag} {tgt_tag} {text}"
             inputs = self._tokenizer(tagged_input, return_tensors="pt", truncation=True, max_length=256)
+            if hasattr(self, "_device") and self._device == "cuda":
+                inputs = {k: v.to(self._device) for k, v in inputs.items()}
             with self._torch.no_grad():
                 out_ids = self._model.generate(
                     **inputs,

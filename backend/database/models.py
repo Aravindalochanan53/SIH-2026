@@ -23,7 +23,7 @@ from backend.database.base import Base
 
 
 def _utc_now():
-    return datetime.now(timezone.utc)
+    return datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
 
 
 def _gen_uuid():

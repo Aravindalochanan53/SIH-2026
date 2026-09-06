@@ -66,6 +66,7 @@ export function LanguageSelector({
               minWidth: '180px',
             }}
           >
+            <option value="auto">✨ Auto Detect (Spoken Speech)</option>
             {languages.map((l) => (
               <option key={`src-${l.code}`} value={l.code} disabled={l.code === targetLang}>
                 {l.name} — {l.native_name}

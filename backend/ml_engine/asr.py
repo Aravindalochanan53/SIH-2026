@@ -51,15 +51,28 @@ class FasterWhisperASR(BaseASR):
     def __init__(self):
         try:
             from faster_whisper import WhisperModel
+            device = settings.whisper_device
+            compute_type = settings.whisper_compute_type
+            try:
+                import torch
+                if torch.cuda.is_available() and device in ("cuda", "auto"):
+                    device = "cuda"
+                    compute_type = "float16"
+            except ImportError:
+                pass
+
             logger.info(
                 f"Loading Multilingual Faster-Whisper model={settings.whisper_model_size} "
-                f"device={settings.whisper_device} compute={settings.whisper_compute_type}"
+                f"device={device} compute={compute_type}"
             )
             self._model = WhisperModel(
                 settings.whisper_model_size,
-                device=settings.whisper_device,
-                compute_type=settings.whisper_compute_type,
+                device=device,
+                compute_type=compute_type,
+                download_root=settings.model_cache_dir,
             )
+            self._device = device
+            self._compute_type = compute_type
             self._ready = True
         except Exception as e:
             logger.warning(f"Faster-Whisper not available ({e}); will fall back to MockASR")

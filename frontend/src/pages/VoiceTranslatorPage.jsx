@@ -4,7 +4,6 @@ import { LanguageSelector } from '../components/LanguageSelector';
 import { AudioControls } from '../components/AudioControls';
 import { LiveTranslator } from '../components/LiveTranslator';
 import { LatencyIndicator } from '../components/LatencyIndicator';
-import { WorksheetPanel } from '../components/WorksheetPanel';
 import { useAppStore } from '../store/useAppStore';
 import { StreamingAudioBridge } from '../websocket';
 
@@ -149,13 +148,12 @@ export function VoiceTranslatorPage() {
         isOffline={isSimulatedOffline || voiceState.isOffline}
       />
 
-      {/* Latency Breakdown & Pedagogy Panels */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+      {/* Latency Breakdown */}
+      <div>
         <LatencyIndicator
           latencyMs={voiceState.latencyMs}
           stages={voiceState.stageLatencies}
         />
-        <WorksheetPanel sourceLang={sourceLang} targetLang={targetLang} />
       </div>
     </div>
   );

@@ -76,3 +76,17 @@ logs/
 .DS_Store
 Thumbs.db
 .pytest_cache/
+
+# Backend local database
+backend/data/*.db
+backend/data/*.sqlite
+
+# Generated videos
+backend/data/videos/
+data/videos/
+
+# Video files
+*.mp4
+
+# Temporary / scratch files
+scratch/

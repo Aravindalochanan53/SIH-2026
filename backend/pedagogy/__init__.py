@@ -1,3 +1,0 @@
-"""
-Pedagogy Engine for TRANSLARA.
-"""

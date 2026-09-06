@@ -249,34 +249,45 @@ def run_training(config: Dict, device: str, args: argparse.Namespace):
         }
 
     fp16 = config.get("fp16", False) and device == "cuda"
-    training_args = TrainingArguments(
-        output_dir=output_dir,
-        num_train_epochs=num_epochs,
-        per_device_train_batch_size=cfg["batch_size"],
-        per_device_eval_batch_size=cfg["eval_batch_size"],
-        gradient_accumulation_steps=cfg["gradient_accumulation_steps"],
-        learning_rate=cfg["learning_rate"],
-        fp16=fp16,
-        evaluation_strategy="steps",
-        eval_steps=cfg["eval_steps"],
-        save_strategy="steps",
-        save_steps=cfg["save_steps"],
-        logging_steps=cfg["logging_steps"],
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
-        greater_is_better=True,
-        report_to="none",
-        resume_from_checkpoint=args.resume or cfg.get("resume_from_checkpoint"),
-    )
+    import inspect
+    sig = inspect.signature(TrainingArguments.__init__)
+    eval_arg = "eval_strategy" if "eval_strategy" in sig.parameters else "evaluation_strategy"
+    strat = "epoch" if num_epochs <= 5 else "steps"
+
+    training_kwargs = {
+        "output_dir": output_dir,
+        "num_train_epochs": num_epochs,
+        "per_device_train_batch_size": cfg["batch_size"],
+        "per_device_eval_batch_size": cfg["eval_batch_size"],
+        "gradient_accumulation_steps": cfg["gradient_accumulation_steps"],
+        "learning_rate": cfg["learning_rate"],
+        "fp16": fp16,
+        eval_arg: strat,
+        "save_strategy": strat,
+        "logging_steps": cfg["logging_steps"],
+        "load_best_model_at_end": True,
+        "metric_for_best_model": "f1",
+        "greater_is_better": True,
+        "report_to": "none",
+        "resume_from_checkpoint": args.resume or cfg.get("resume_from_checkpoint"),
+    }
+    if strat == "steps":
+        training_kwargs["eval_steps"] = cfg["eval_steps"]
+        training_kwargs["save_steps"] = cfg["save_steps"]
+
+    training_args = TrainingArguments(**training_kwargs)
+
+    trainer_sig = inspect.signature(Trainer.__init__)
+    tok_kw = {"processing_class": tokenizer} if "processing_class" in trainer_sig.parameters else {"tokenizer": tokenizer}
 
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=val_ds,
-        tokenizer=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
+        **tok_kw,
     )
 
     logger.info("[NER-Train] 🚀 Starting XLM-RoBERTa NER fine-tuning...")

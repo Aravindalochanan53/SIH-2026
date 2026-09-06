@@ -208,26 +208,34 @@ def train_language(
     val_ds = val_ds.map(preprocess, batched=True, remove_columns=["audio"])
 
     fp16 = config.get("fp16", False) and device == "cuda"
-    training_args = TrainingArguments(
-        output_dir=output_dir,
-        num_train_epochs=num_epochs,
-        per_device_train_batch_size=cfg["batch_size"],
-        gradient_accumulation_steps=cfg["gradient_accumulation_steps"],
-        learning_rate=cfg["learning_rate"],
-        fp16=fp16,
-        evaluation_strategy="epoch",
-        save_strategy="epoch",
-        logging_steps=50,
-        load_best_model_at_end=True,
-        report_to="none",
-    )
+    import inspect
+    sig = inspect.signature(TrainingArguments.__init__)
+    eval_arg = "eval_strategy" if "eval_strategy" in sig.parameters else "evaluation_strategy"
+
+    training_kwargs = {
+        "output_dir": output_dir,
+        "num_train_epochs": num_epochs,
+        "per_device_train_batch_size": cfg["batch_size"],
+        "gradient_accumulation_steps": cfg["gradient_accumulation_steps"],
+        "learning_rate": cfg["learning_rate"],
+        "fp16": fp16,
+        eval_arg: "epoch",
+        "save_strategy": "epoch",
+        "logging_steps": 50,
+        "load_best_model_at_end": True,
+        "report_to": "none",
+    }
+    training_args = TrainingArguments(**training_kwargs)
+
+    trainer_sig = inspect.signature(Trainer.__init__)
+    tok_kw = {"processing_class": tokenizer} if "processing_class" in trainer_sig.parameters else {"tokenizer": tokenizer}
 
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=val_ds,
-        tokenizer=tokenizer,
+        **tok_kw,
     )
 
     logger.info(f"[TTS-Train] 🚀 Training TTS for {language}...")

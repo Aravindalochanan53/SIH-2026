@@ -121,16 +121,6 @@ class ModelRegistry:
                 status=ModelStatus.NOT_TRAINED,
                 fallback_model="mms-tts-base",
             ),
-            ModelInfo(
-                model_name="TRANSLARA-EDU-v1",
-                model_type="education",
-                version="v1",
-                base_model="Qwen/Qwen2.5-0.5B-Instruct",
-                output_dir="models/education/TRANSLARA-EDU-v1",
-                languages=["en", "ta", "ml", "hi"],
-                status=ModelStatus.NOT_TRAINED,
-                fallback_model="rule-based-edu",
-            ),
         ]
         for info in defaults:
             if info.model_name not in self._registry:

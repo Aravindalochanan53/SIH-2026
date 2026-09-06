@@ -42,14 +42,29 @@ class IndicTrans2Provider(BaseTranslationProvider):
 
     def _init_model(self):
         try:
+            from pathlib import Path
+            import os
+            # If not a local path and HF_TOKEN not set, avoid blocking network calls for gated models
+            model_path = Path(self.model_id)
+            if not model_path.exists() and not os.environ.get("HF_TOKEN"):
+                logger.info(f"IndicTrans2 local path '{self.model_id}' not found locally; using high-speed fallback provider.")
+                self._ready = False
+                return
+
             import torch
             self._torch = torch
             self._device = "cuda" if torch.cuda.is_available() else "cpu"
+            self._dtype = torch.float16 if self._device == "cuda" else torch.float32
 
             from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-            logger.info(f"Loading IndicTrans2 ({self.model_id}) on device={self._device}")
-            self._tokenizer = AutoTokenizer.from_pretrained(self.model_id, trust_remote_code=True)
-            self._model = AutoModelForSeq2SeqLM.from_pretrained(self.model_id, trust_remote_code=True).to(self._device)
+            logger.info(f"Loading IndicTrans2 ({self.model_id}) on device={self._device} ({self._dtype})")
+            self._tokenizer = AutoTokenizer.from_pretrained(self.model_id, trust_remote_code=True, local_files_only=model_path.exists())
+            self._model = AutoModelForSeq2SeqLM.from_pretrained(
+                self.model_id,
+                trust_remote_code=True,
+                torch_dtype=self._dtype,
+                local_files_only=model_path.exists(),
+            ).to(self._device)
             self._model.eval()
             self._ready = True
             logger.info("IndicTrans2 model initialized successfully.")

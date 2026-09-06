@@ -37,7 +37,7 @@ export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('teacher');
+  const role = 'user';
   const [srcLang, setSrcLang] = useState('ta');
   const [tgtLang, setTgtLang] = useState('ml');
   const [showPassword, setShowPassword] = useState(false);
@@ -91,7 +91,7 @@ export function RegisterPage() {
         </div>
 
         <h1 className="auth-title">Create Account</h1>
-        <p className="auth-subtitle">Join TRANSLARA to start translating across Indian languages</p>
+        <p className="auth-subtitle">Create your training account to start translating across Indian languages</p>
 
         {error && (
           <div className="form-error" style={{ marginBottom: '16px' }}>
@@ -118,7 +118,7 @@ export function RegisterPage() {
             <input
               type="email"
               className="form-input"
-              placeholder="teacher@school.edu.in"
+              placeholder="user@training.org"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -169,14 +169,6 @@ export function RegisterPage() {
                 required
               />
             </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Role</label>
-            <select className="form-select" value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="teacher">Teacher</option>
-              <option value="admin">Administrator</option>
-            </select>
           </div>
 
           <div className="form-input-row">

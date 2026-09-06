@@ -22,7 +22,7 @@ class RegisterRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=150)
     email: EmailStr
     password: str = Field(..., min_length=6, max_length=100)
-    role: Optional[str] = Field(default="teacher")
+    role: Optional[str] = Field(default="user")
     preferred_source_lang: Optional[str] = Field(default="ta")
     preferred_target_lang: Optional[str] = Field(default="ml")
 
@@ -57,7 +57,7 @@ class AuthResponse(BaseModel):
 
 @router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
 async def register(req: RegisterRequest, db: Session = Depends(get_db)):
-    """Register a new teacher or admin account in TRANSLARA MSSQL database."""
+    """Register a new user account in TRANSLARA MSSQL database."""
     # Check if email is already taken
     existing_user = db.query(User).filter(User.email == req.email.lower().strip()).first()
     if existing_user:
@@ -67,9 +67,9 @@ async def register(req: RegisterRequest, db: Session = Depends(get_db)):
         )
 
     # Validate role
-    role = req.role.lower() if req.role else "teacher"
-    if role not in ("teacher", "admin"):
-        role = "teacher"
+    role = req.role.lower().strip() if req.role else "user"
+    if role not in ("user", "trainee", "teacher", "admin"):
+        role = "user"
 
     # Create user with hashed password
     user = User(

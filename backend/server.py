@@ -11,7 +11,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
-from backend.api import cache, chat, health, languages, pedagogy, translation, video, voice
+from backend.api import cache, chat, health, languages, translation, video, voice
 from backend.app.api.translation import router as local_translation_router
 from backend.app.api.speech import router as local_speech_router
 from backend.app.api.ner import router as local_ner_router
@@ -26,7 +26,6 @@ from backend.database.seed import seed_database
 from backend.ml_engine.audio_processor import AudioProcessor
 from backend.ml_engine.pipeline import run_pipeline, stream_tts, warm_up
 from backend.ml_engine.vad import StreamingVAD
-from backend.pedagogy.fonts import register_all_fonts
 
 
 @asynccontextmanager
@@ -34,13 +33,18 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     logger.info("Initializing TRANSLARA Backend Server with 100% Local AI Models...")
 
-    # 1. Initialize Primary MSSQL Database & Local Offline Cache
-    try:
-        init_main_db()
-        l_cnt, p_cnt = seed_database()
-        logger.info(f"TRANSLARA Primary Database initialized (seeded {l_cnt} languages, {p_cnt} phrases).")
-    except Exception as e:
-        logger.warning(f"Primary database initialization notice ({e}); running with offline resilience.")
+    # 1. Initialize Primary MSSQL Database in background thread (non-blocking)
+    import threading
+
+    def _init_db_bg():
+        try:
+            init_main_db()
+            l_cnt, p_cnt = seed_database()
+            logger.info(f"TRANSLARA Primary Database initialized (seeded {l_cnt} languages, {p_cnt} phrases).")
+        except Exception as e:
+            logger.warning(f"Primary database initialization notice ({e}); running with offline resilience.")
+
+    threading.Thread(target=_init_db_bg, daemon=True).start()
 
     try:
         init_cache_db()
@@ -49,13 +53,7 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Offline cache notice: {e}")
 
-    # 2. Register Indian Language Fonts
-    try:
-        register_all_fonts()
-    except Exception as e:
-        logger.warning(f"Font registration notice: {e}")
-
-    # 3. Load 100% Local AI Models into Memory
+    # 2. Load 100% Local AI Models into Memory
     try:
         get_local_model_manager().load_all_models()
     except Exception as e:
@@ -74,7 +72,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI App
 app = FastAPI(
     title="TRANSLARA API",
-    description="Real-Time Multilingual Speech Translation, Video Engine & AI Pedagogy Assistant with Local AI Models & MSSQL",
+    description="Real-Time Multilingual Speech, Text & Video Translation Platform with Local AI Models & MSSQL",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -82,7 +80,16 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.get_cors_origins_list(),
+    allow_origins=settings.get_cors_origins_list() + [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
+        "http://127.0.0.1:5175",
+    ],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,7 +103,6 @@ app.include_router(translation.router)
 app.include_router(voice.router)
 app.include_router(video.router)
 app.include_router(chat.router)
-app.include_router(pedagogy.router)
 app.include_router(cache.router)
 
 # Register Local AI Routers
@@ -110,7 +116,7 @@ app.include_router(local_ai_router)
 async def root():
     return {
         "project": "TRANSLARA",
-        "description": "Real-Time Multilingual Speech Translation, Video Engine & Vernacular Learning",
+        "description": "Real-Time Multilingual Speech, Text & Video Translation Platform",
         "docs": "/docs",
         "health": "/health",
         "languages": "/api/languages",

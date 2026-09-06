@@ -40,9 +40,9 @@ class ChatService:
             ChatMessage(
                 id="msg_welcome_01",
                 sender="assistant",
-                text="Hello! I am TRANSLARA AI, your multilingual classroom assistant. How can I help you with translations, lesson plans, or primary worksheets today?",
+                text="Hello! I am TRANSLARA AI, your multilingual translation and language assistant. Ask me to translate sentences, explain cross-lingual grammar nuances, or help with Indian language vocabulary.",
                 language="en",
-                translated_text="வணக்கம்! நான் TRANSLARA AI. வகுப்பறை மொழிபெயர்ப்பு, சொற்களஞ்சியம் மற்றும் கற்பித்தலில் உங்களுக்கு எப்படி உதவ முடியும்?",
+                translated_text="வணக்கம்! நான் TRANSLARA AI. பன்மொழி மொழிபெயர்ப்பு, சொற்களஞ்சியம் மற்றும் இலக்கண நுணுக்கங்களில் உங்களுக்கு எப்படி உதவ முடியும்?",
                 target_language="ta",
             )
         ]
@@ -60,7 +60,7 @@ class ChatService:
         source_lang: str = "en",
         target_lang: str = "ta",
     ) -> ChatMessage:
-        """Generate specialized vernacular educational response using TRANSLARA AI."""
+        """Generate specialized multilingual translation and grammar response using TRANSLARA AI."""
         engine = get_translation_engine()
         src_cfg = get_language(source_lang)
         tgt_cfg = get_language(target_lang)
@@ -69,47 +69,31 @@ class ChatService:
 
         user_lower = user_text.lower().strip()
 
-        # Check if user requested a direct translation
-        if user_lower.startswith("translate") or "மொழிபெயர்க்க" in user_text or "വിവർത്തനം" in user_text:
-            cleaned_input = user_text
-            for prefix in ["translate", "translate this:", "translate:"]:
-                if user_lower.startswith(prefix):
-                    cleaned_input = user_text[len(prefix):].strip()
-                    break
+        # Check if user requested a direct translation or specific phrase
+        cleaned_input = user_text
+        for prefix in ["translate this:", "translate:", "translate", "meaning of:", "meaning of"]:
+            if user_lower.startswith(prefix):
+                cleaned_input = user_text[len(prefix):].strip()
+                break
 
-            trans_res = await engine.translate(cleaned_input, source_lang, target_lang)
-            ans_text = f"Translation ({tgt_name}):\n{trans_res.text}"
+        trans_res = await engine.translate(cleaned_input, source_lang, target_lang)
+
+        if "grammar" in user_lower or "rule" in user_lower or "tense" in user_lower:
+            ans_text = (
+                f"Grammar & Syntax Note ({src_name} → {tgt_name}):\n"
+                f"• Source text: \"{cleaned_input}\"\n"
+                f"• Translated text: \"{trans_res.text}\"\n"
+                f"• Structure: {tgt_name} typically follows Subject-Object-Verb (SOV) order with postpositions."
+            )
             trans_text = trans_res.text
-
-        elif "explain" in user_lower or "number" in user_lower or "counting" in user_lower:
+        elif "idiom" in user_lower or "proverb" in user_lower or "phrase" in user_lower:
             ans_text = (
-                f"Foundational Numeracy Guide (Grade 1):\n"
-                f"1 - One (🍎 One apple)\n"
-                f"2 - Two (🍎🍎 Two apples)\n"
-                f"3 - Three (⭐ Three stars)\n"
-                f"4 - Four (🚗 Four cars)\n"
-                f"5 - Five (🖐️ Five fingers on a hand)"
+                f"Linguistic & Idiomatic Translation ({src_name} → {tgt_name}):\n"
+                f"• Literal / Contextual translation: \"{trans_res.text}\""
             )
-            trans_res = await engine.translate("Count the objects from 1 to 5.", source_lang, target_lang)
-            trans_text = f"{tgt_name}: {trans_res.text}"
-
-        elif "worksheet" in user_lower or "activity" in user_lower:
-            ans_text = (
-                f"Grade 1 Bilingual {src_name} & {tgt_name} Worksheet is ready! You can generate and download the printable PDF in the Worksheet Studio."
-            )
-            trans_res = await engine.translate("Grade 1 Bilingual Worksheet is ready.", source_lang, target_lang)
             trans_text = trans_res.text
-
-        elif "simplify" in user_lower or "grade 1" in user_lower:
-            ans_text = (
-                f"Simplified for Grade 1: Use short visual sentences, repeating phrases, and picture cards."
-            )
-            trans_res = await engine.translate("Look at the picture. Read this word.", source_lang, target_lang)
-            trans_text = f"{tgt_name}: {trans_res.text}"
-
         else:
-            trans_res = await engine.translate(user_text, source_lang, target_lang)
-            ans_text = f"Here is the educational explanation for '{user_text}':"
+            ans_text = f"Translation ({src_name} → {tgt_name}):\n{trans_res.text}"
             trans_text = trans_res.text
 
         # Record User Message

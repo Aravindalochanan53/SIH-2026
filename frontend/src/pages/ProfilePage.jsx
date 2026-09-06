@@ -39,8 +39,8 @@ export function ProfilePage() {
           <div className="profile-info">
             <h2>{user.name}</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>{user.email}</p>
-            <span className={`role-badge ${user.role}`}>
-              {user.role === 'admin' ? '🛡️ Administrator' : '👩‍🏫 Teacher'}
+            <span className="role-badge" style={{ backgroundColor: 'rgba(37, 99, 235, 0.12)', color: 'var(--primary)' }}>
+              👤 Training Member
             </span>
           </div>
         </div>

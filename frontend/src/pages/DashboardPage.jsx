@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Languages, Mic, Video, MessageSquare, FileText, BookOpen,
+  Languages, Mic, Video, MessageSquare, Radio,
   Activity, Globe2, Zap, WifiOff, TrendingUp, Clock,
-  ArrowRight, Sparkles
+  ArrowRight, Sparkles, BookOpen
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
@@ -66,37 +66,37 @@ export function DashboardPage() {
       to: '/video',
       icon: Video,
       title: 'Video Studio',
-      desc: 'Upload lecture videos for synchronized dual subtitle translation.',
+      desc: 'Upload videos for instant playback and synchronized voice translation.',
       color: '#8B5CF6',
       bg: 'rgba(139, 92, 246, 0.12)',
     },
     {
-      to: '/chat',
-      icon: MessageSquare,
-      title: 'AI Assistant',
-      desc: 'Multilingual pedagogy chatbot for classroom use.',
-      color: '#06B6D4',
-      bg: 'rgba(6, 182, 212, 0.12)',
-    },
-    {
-      to: '/worksheets',
-      icon: FileText,
-      title: 'Worksheets',
-      desc: 'Generate bilingual flashcards & numeracy/literacy worksheets.',
+      to: '/meeting',
+      icon: Radio,
+      title: 'Live Meeting',
+      desc: 'Real-time multi-speaker conversation translation.',
       color: '#F59E0B',
       bg: 'rgba(245, 158, 11, 0.12)',
     },
     {
-      to: '/learning',
-      icon: BookOpen,
-      title: 'Flashcards',
-      desc: 'Interactive bilingual flashcard decks for FLN learning.',
+      to: '/offline',
+      icon: WifiOff,
+      title: 'Offline Library',
+      desc: 'Access verified multilingual translation dataset without internet.',
       color: '#EC4899',
       bg: 'rgba(236, 72, 153, 0.12)',
     },
+    {
+      to: '/chat',
+      icon: MessageSquare,
+      title: 'AI Translation Assistant',
+      desc: 'Interactive assistant for translations, grammar, and vocabulary.',
+      color: '#06B6D4',
+      bg: 'rgba(6, 182, 212, 0.12)',
+    },
   ];
 
-  const firstName = user?.name?.split(' ')[0] || 'Teacher';
+  const firstName = user?.name?.split(' ')[0] || 'User';
 
   return (
     <div className="page-container animate-fade-in">
@@ -124,7 +124,7 @@ export function DashboardPage() {
               </span>
             </div>
             <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-              Your AI-powered multilingual classroom is ready. Start translating across 11 Indian languages.
+              Your AI-powered multilingual translation engine is active. Real-time translation ready across 11 Indian languages.
             </p>
           </div>
 
@@ -164,7 +164,7 @@ export function DashboardPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
             <Sparkles size={16} color="var(--accent-amber)" />
             <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              Classroom Tools
+              Training Tools
             </h2>
           </div>
           <div className="feature-cards-grid">

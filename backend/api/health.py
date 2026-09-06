@@ -15,9 +15,10 @@ router = APIRouter(tags=["Health & Metrics"])
 @router.get("/api/health", response_model=HealthResponse)
 async def get_health():
     """Returns status of all core AI subsystems and MSSQL primary database."""
+    import asyncio
     mgr = get_model_manager()
     status_map = mgr.get_status()
-    db_health = check_db_health()
+    db_health = await asyncio.to_thread(check_db_health)
 
     db_status = db_health.get("status", "disconnected")
     overall_status = "healthy" if db_status == "connected" else "degraded"

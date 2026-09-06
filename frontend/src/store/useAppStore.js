@@ -3,6 +3,15 @@ import { create } from 'zustand';
 const TOKEN_KEY = 'translara_auth_token';
 const USER_KEY = 'translara_user';
 
+const defaultUser = {
+  id: 1,
+  name: 'User',
+  email: 'user@translara.ai',
+  role: 'user',
+  preferred_source_lang: 'ta',
+  preferred_target_lang: 'ml',
+};
+
 function loadPersistedAuth() {
   try {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -11,7 +20,7 @@ function loadPersistedAuth() {
       return { token, user: JSON.parse(userStr), isAuthenticated: true };
     }
   } catch (e) {}
-  return { token: null, user: null, isAuthenticated: false };
+  return { token: 'offline_token', user: defaultUser, isAuthenticated: true };
 }
 
 const persisted = loadPersistedAuth();

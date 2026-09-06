@@ -29,3 +29,12 @@ export async function deleteTranslationHistoryItem(id) {
     method: 'DELETE',
   });
 }
+
+export async function getCachedPhrases(category = null, sourceLang = null, targetLang = null) {
+  const params = new URLSearchParams();
+  if (category) params.append('category', category);
+  if (sourceLang) params.append('source_lang', sourceLang);
+  if (targetLang) params.append('target_lang', targetLang);
+  const qs = params.toString();
+  return request(`/api/cache/phrases${qs ? `?${qs}` : ''}`);
+}

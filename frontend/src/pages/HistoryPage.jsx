@@ -62,7 +62,7 @@ export function HistoryPage() {
           Translation & Activity History
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-          Review recent text translations, voice sessions, classroom video jobs, and pedagogy chats
+          Review recent text translations, voice sessions, training video jobs, and translation chats
         </p>
       </div>
 

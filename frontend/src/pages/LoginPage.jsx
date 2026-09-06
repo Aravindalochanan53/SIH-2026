@@ -46,7 +46,7 @@ export function LoginPage() {
         </div>
 
         <h1 className="auth-title">Welcome Back</h1>
-        <p className="auth-subtitle">Sign in to your multilingual classroom</p>
+        <p className="auth-subtitle">Sign in to Training Translation Platform</p>
 
         {error && (
           <div className="form-error">
@@ -61,7 +61,7 @@ export function LoginPage() {
             <input
               type="email"
               className="form-input"
-              placeholder="teacher@school.edu.in"
+              placeholder="user@training.org"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"

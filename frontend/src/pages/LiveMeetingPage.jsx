@@ -14,10 +14,10 @@ export function LiveMeetingPage() {
       {/* Header */}
       <div>
         <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
-          Live Classroom & Meeting Translation
+          Live Training & Meeting Translation
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-          Capture tab audio or microphone stream in real-time and render floating subtitles on Google Meet, Zoom, or web lectures
+          Capture tab audio or microphone stream in real-time and render floating subtitles on Google Meet, Zoom, or web training sessions
         </p>
       </div>
 
@@ -53,8 +53,11 @@ export function LiveMeetingPage() {
           <div
             style={{
               borderRadius: 'var(--radius-lg)',
-              backgroundColor: `rgba(23, 32, 51, ${hudOpacity / 100})`,
-              color: '#ffffff',
+              backgroundColor: `rgba(255, 255, 255, ${Math.max(0.75, hudOpacity / 100)})`,
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-primary)',
               padding: '20px',
               boxShadow: 'var(--shadow-lg)',
               minHeight: '220px',
@@ -63,41 +66,41 @@ export function LiveMeetingPage() {
               justifyContent: 'space-between',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 6px', backgroundColor: 'var(--primary)', borderRadius: '4px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 6px', backgroundColor: 'var(--primary)', color: '#ffffff', borderRadius: '4px' }}>
                   TRANSLARA HUD
                 </span>
-                <span style={{ fontSize: '12px', fontWeight: 600 }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {sourceLang.toUpperCase()} ⇄ {targetLang.toUpperCase()}
                 </span>
               </div>
-              <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>
+              <span style={{ fontSize: '11px', color: 'var(--success)', fontWeight: 700 }}>
                 ● LIVE
               </span>
             </div>
 
             <div style={{ padding: '12px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div>
-                <span style={{ fontSize: '11px', opacity: 0.7, textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '2px', fontWeight: 700 }}>
                   Source Audio
                 </span>
-                <div style={{ fontSize: `${hudFontSize}px`, color: '#F1F5F9' }}>
+                <div style={{ fontSize: `${hudFontSize}px`, color: 'var(--text-secondary)' }}>
                   {isSimulating ? 'வணக்கம் மாணவர்களே, அனைவரும் புத்தகத்தைத் திறக்கவும்.' : 'Stream paused.'}
                 </div>
               </div>
 
               <div>
-                <span style={{ fontSize: '11px', opacity: 0.7, textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '2px', fontWeight: 700 }}>
                   Translated Subtitles
                 </span>
-                <div style={{ fontSize: `${hudFontSize + 2}px`, fontWeight: 700, color: '#38BDF8' }}>
+                <div style={{ fontSize: `${hudFontSize + 2}px`, fontWeight: 700, color: 'var(--primary)' }}>
                   {isSimulating ? 'നമസ്കാരം വിദ്യാർത്ഥികളേ, എല്ലാവരും പുസ്തകം തുറക്കൂ.' : '--'}
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', opacity: 0.6, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', borderTop: '1px solid var(--border-subtle)', paddingTop: '6px' }}>
               <span>Latency: 1.42s</span>
               <span>16kHz WebRTC VAD Active</span>
             </div>

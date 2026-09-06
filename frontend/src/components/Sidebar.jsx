@@ -7,8 +7,6 @@ import {
   Video,
   MessageSquare,
   Radio,
-  BookOpen,
-  FileText,
   WifiOff,
   History,
   Settings,
@@ -22,8 +20,6 @@ export function Sidebar() {
     { to: '/video', label: 'Video', icon: Video, badge: 'HD' },
     { to: '/chat', label: 'AI Chat', icon: MessageSquare, badge: 'AI' },
     { to: '/meeting', label: 'Live Meeting', icon: Radio },
-    { to: '/learning', label: 'Flashcards', icon: BookOpen },
-    { to: '/worksheets', label: 'Worksheets', icon: FileText },
     { to: '/offline', label: 'Offline Library', icon: WifiOff },
     { to: '/history', label: 'History', icon: History },
     { to: '/settings', label: 'Settings', icon: Settings },
@@ -35,7 +31,7 @@ export function Sidebar() {
         <div className="brand-logo-icon">TL</div>
         <div className="brand-text">
           <span className="brand-name">TRANSLARA</span>
-          <span className="brand-badge">EdTech AI</span>
+          <span className="brand-badge">Translation AI</span>
         </div>
       </Link>
 

@@ -12,8 +12,7 @@ import {
   ArrowRight,
   Video,
   MessageSquare,
-  BookOpen,
-  FileText,
+  WifiOff,
   Radio,
   ClipboardPaste,
   Trash2,
@@ -211,7 +210,7 @@ export function HomePage() {
               borderRadius: 'var(--radius-full)', background: 'var(--primary-light)',
               color: 'var(--primary)', border: '1px solid var(--primary-border)',
             }}>
-              AI Multilingual Classroom
+              AI Multilingual Training Platform
             </span>
           </div>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
@@ -365,7 +364,7 @@ export function HomePage() {
         {/* Sample Prompts */}
         <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
           <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>
-            Quick Classroom Examples:
+            Quick Training Examples:
           </span>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {samplePrompts.map((p, idx) => (
@@ -395,28 +394,28 @@ export function HomePage() {
             <Mic size={20} />
           </div>
           <div className="feature-card-title">Live Speech</div>
-          <div className="feature-card-desc">Real-time classroom translation with zero-jitter streaming.</div>
+          <div className="feature-card-desc">Real-time speech translation with zero-jitter streaming.</div>
         </Link>
         <Link to="/video" className="feature-card">
           <div className="feature-card-icon" style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)', color: '#8B5CF6' }}>
             <Video size={20} />
           </div>
           <div className="feature-card-title">Video Translate</div>
-          <div className="feature-card-desc">Generate dual subtitles and voice dubbing for lectures.</div>
+          <div className="feature-card-desc">Generate dual subtitles and translated voice dubbing for training videos.</div>
         </Link>
         <Link to="/chat" className="feature-card">
           <div className="feature-card-icon" style={{ backgroundColor: 'rgba(6, 182, 212, 0.12)', color: '#06B6D4' }}>
             <MessageSquare size={20} />
           </div>
-          <div className="feature-card-title">TRANSLARA AI</div>
-          <div className="feature-card-desc">Multilingual concept explanations and lesson planning.</div>
+          <div className="feature-card-title">AI Assistant</div>
+          <div className="feature-card-desc">Multilingual grammar nuances and translation assistance.</div>
         </Link>
-        <Link to="/worksheets" className="feature-card">
+        <Link to="/offline" className="feature-card">
           <div className="feature-card-icon" style={{ backgroundColor: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B' }}>
-            <FileText size={20} />
+            <WifiOff size={20} />
           </div>
-          <div className="feature-card-title">Worksheets</div>
-          <div className="feature-card-desc">Bilingual printable flashcards and literacy worksheets.</div>
+          <div className="feature-card-title">Offline Library</div>
+          <div className="feature-card-desc">Verified multilingual translation dataset for offline access.</div>
         </Link>
       </div>
     </div>

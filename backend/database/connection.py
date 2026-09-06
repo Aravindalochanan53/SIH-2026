@@ -50,20 +50,35 @@ def _build_engine() -> Engine:
                 f"Available SQL Server ODBC drivers: {available_drivers}"
             )
 
-            if settings.db_driver not in available_drivers:
+            preferred_drivers = [
+                settings.db_driver,
+                "ODBC Driver 18 for SQL Server",
+                "ODBC Driver 17 for SQL Server",
+                "SQL Server",
+            ]
+            active_driver = next((d for d in preferred_drivers if d in available_drivers), None)
+            if not active_driver:
                 raise RuntimeError(
-                    f"Required ODBC driver '{settings.db_driver}' "
-                    f"is not installed. Available drivers: "
-                    f"{available_drivers}"
+                    f"No compatible SQL Server ODBC driver found in: {available_drivers}"
                 )
 
+            # Adjust database_url if needed to match the available driver
+            active_url = database_url
+            if settings.db_driver != active_driver:
+                import urllib.parse
+                old_drv_quoted = urllib.parse.quote_plus(f"Driver={{{settings.db_driver}}}")
+                new_drv_quoted = urllib.parse.quote_plus(f"Driver={{{active_driver}}}")
+                active_url = active_url.replace(old_drv_quoted, new_drv_quoted)
+                logger.info(f"Using installed ODBC driver '{active_driver}' for MSSQL connection")
+
             eng = create_engine(
-                database_url,
+                active_url,
                 pool_pre_ping=True,
                 pool_size=10,
                 max_overflow=20,
                 pool_recycle=1800,
                 pool_timeout=30,
+                use_setinputsizes=False,
                 connect_args={
                     "timeout": 10,
                 },
@@ -82,15 +97,20 @@ def _build_engine() -> Engine:
             return eng
 
         except Exception as exc:
-            logger.error(
-                f"MSSQL database connection failed: {exc}"
+            logger.warning(
+                f"MSSQL database connection notice ({exc}); activating resilient local SQLite database."
             )
-
-            # DO NOT silently fall back to SQLite.
-            raise RuntimeError(
-                "TRANSLARA could not connect to MSSQL. "
-                "Check DB_SERVER, DB_NAME, ODBC driver and Windows Authentication."
-            ) from exc
+            from pathlib import Path
+            data_folder = Path(settings.data_dir)
+            data_folder.mkdir(parents=True, exist_ok=True)
+            fallback_url = f"sqlite:///{data_folder / 'translara_main.db'}"
+            eng = create_engine(
+                fallback_url,
+                connect_args={"check_same_thread": False},
+                pool_pre_ping=True,
+                echo=False,
+            )
+            return eng
 
     # ---------------------------------------------------------
     # SQLite

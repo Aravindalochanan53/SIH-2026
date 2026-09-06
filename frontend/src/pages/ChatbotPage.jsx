@@ -10,8 +10,8 @@ export function ChatbotPage() {
     {
       id: 'welcome',
       sender: 'assistant',
-      text: 'Hello! I am TRANSLARA AI, your multilingual classroom pedagogy assistant. How can I help you today with lesson translations, vocabulary building, or primary school worksheets?',
-      translated_text: 'வணக்கம்! நான் உங்கள் பன்மொழி கற்றல் உதவியாளர். உங்களுக்கு எப்படி உதவ முடியும்?',
+      text: 'Hello! I am TRANSLARA AI, your multilingual translation and grammar assistant. Ask me to translate any phrase, explore cross-lingual grammar nuances, or explain Indian language vocabulary.',
+      translated_text: 'வணக்கம்! நான் உங்கள் பன்மொழி மொழிபெயர்ப்பு உதவியாளர். எந்தவொரு வாக்கியத்தையும் மொழிபெயர்க்கவும், இலக்கண நுணுக்கங்களை அறியவும் நான் உங்களுக்கு உதவ முடியும்.',
       language: sourceLang,
       target_language: targetLang,
       timestamp: 'Just now',
@@ -24,10 +24,10 @@ export function ChatbotPage() {
 
   const suggestedPrompts = [
     'Translate a sentence',
-    'Explain a concept',
-    'Create a worksheet',
-    'Simplify for Grade 1',
-    'Create a classroom activity',
+    'Explain grammar nuances',
+    'Compare regional idioms',
+    'Synonyms & vocabulary',
+    'Pronunciation & transliteration',
   ];
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export function ChatbotPage() {
             TRANSLARA AI
           </h1>
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-            Your multilingual classroom assistant
+            Your multilingual training assistant
           </p>
         </div>
 

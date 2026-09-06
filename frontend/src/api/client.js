@@ -3,8 +3,11 @@
  * Communicates exclusively with FastAPI backend via VITE_API_BASE_URL.
  */
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-export const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+export const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL ||
+  (typeof window !== 'undefined'
+    ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.hostname}:8000`
+    : 'ws://localhost:8000');
 
 const TOKEN_STORAGE_KEY = 'translara_auth_token';
 

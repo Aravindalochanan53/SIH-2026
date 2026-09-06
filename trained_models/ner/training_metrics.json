@@ -1,0 +1,38 @@
+{
+  "final_f1": 11.11,
+  "eval_results": {
+    "eval_loss": 3.0350115299224854,
+    "eval_precision": 7.41,
+    "eval_recall": 22.22,
+    "eval_f1": 11.11,
+    "eval_runtime": 0.4024,
+    "eval_samples_per_second": 14.909,
+    "eval_steps_per_second": 2.485,
+    "epoch": 1.0
+  },
+  "base_model": "xlm-roberta-base",
+  "training_date": "2026-09-04T10:16:03Z",
+  "labels": [
+    "O",
+    "B-PERSON",
+    "I-PERSON",
+    "B-LOCATION",
+    "I-LOCATION",
+    "B-VILLAGE",
+    "I-VILLAGE",
+    "B-SCHOOL",
+    "I-SCHOOL",
+    "B-ORGANIZATION",
+    "I-ORGANIZATION",
+    "B-NUMBER",
+    "I-NUMBER",
+    "B-DATE",
+    "I-DATE",
+    "B-TIME",
+    "I-TIME",
+    "B-CLASS",
+    "I-CLASS",
+    "B-SUBJECT",
+    "I-SUBJECT"
+  ]
+}

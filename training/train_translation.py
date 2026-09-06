@@ -193,8 +193,9 @@ def build_hf_dataset(pairs: List[TranslationPair], tokenizer, max_length: int):
                 continue
             tokenizer.src_lang = src_code
             enc = tokenizer(src, max_length=max_length, truncation=True, padding="max_length")
-            with tokenizer.as_target_tokenizer():
-                lab = tokenizer(tgt, max_length=max_length, truncation=True, padding="max_length")
+            if hasattr(tokenizer, "tgt_lang"):
+                tokenizer.tgt_lang = tgt_code
+            lab = tokenizer(text_target=tgt, max_length=max_length, truncation=True, padding="max_length")
             model_inputs.append(enc)
             labels_list.append(lab["input_ids"])
 
@@ -251,10 +252,22 @@ def run_training(config: Dict, device: str, args: argparse.Namespace):
     logger.info("[NMT-Train] Loading NLLB tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(base_model)
 
+    import torch
+    fp16 = config.get("fp16", False) and device == "cuda"
+
     logger.info("[NMT-Train] Loading NLLB model...")
     model = AutoModelForSeq2SeqLM.from_pretrained(base_model)
     if device != "cpu":
         model = model.to(device)
+
+    # PEFT for 6GB VRAM: freeze 262M embedding table and encoder, fine-tune cross-attention & decoder
+    if device == "cuda":
+        model.model.shared.requires_grad_(False)
+        model.model.encoder.requires_grad_(False)
+        model.model.decoder.embed_tokens.requires_grad_(False)
+        model.lm_head.requires_grad_(False)
+        trainable_cnt = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        logger.info(f"[NMT-Train] ⚡ GPU Optimization: Embeddings & Encoder frozen. Trainable parameters: {trainable_cnt:,}")
 
     # Load datasets
     train_pairs = load_translation_dataset(cfg["train_data"], args.src, args.tgt)
@@ -283,45 +296,78 @@ def run_training(config: Dict, device: str, args: argparse.Namespace):
         return {"bleu": round(result["score"], 2)}
 
     fp16 = config.get("fp16", False) and device == "cuda"
-    training_args = Seq2SeqTrainingArguments(
-        output_dir=output_dir,
-        num_train_epochs=num_epochs,
-        per_device_train_batch_size=cfg["batch_size"],
-        per_device_eval_batch_size=cfg["eval_batch_size"],
-        gradient_accumulation_steps=cfg["gradient_accumulation_steps"],
-        learning_rate=cfg["learning_rate"],
-        warmup_ratio=cfg["warmup_ratio"],
-        weight_decay=cfg["weight_decay"],
-        fp16=fp16,
-        evaluation_strategy="steps",
-        eval_steps=cfg["eval_steps"],
-        save_strategy="steps",
-        save_steps=cfg["save_steps"],
-        logging_steps=cfg["logging_steps"],
-        load_best_model_at_end=True,
-        metric_for_best_model="bleu",
-        greater_is_better=True,
-        predict_with_generate=True,
-        generation_max_length=max_tgt_len,
-        report_to="none",
-        resume_from_checkpoint=args.resume or cfg.get("resume_from_checkpoint"),
-    )
+    import inspect
+    sig = inspect.signature(Seq2SeqTrainingArguments.__init__)
+    eval_arg = "eval_strategy" if "eval_strategy" in sig.parameters else "evaluation_strategy"
+    strat = "epoch" if num_epochs <= 5 else "steps"
+
+    training_kwargs = {
+        "output_dir": output_dir,
+        "num_train_epochs": num_epochs,
+        "per_device_train_batch_size": cfg["batch_size"],
+        "per_device_eval_batch_size": cfg["eval_batch_size"],
+        "gradient_accumulation_steps": cfg["gradient_accumulation_steps"],
+        "learning_rate": cfg["learning_rate"],
+        "warmup_ratio": cfg["warmup_ratio"],
+        "weight_decay": cfg["weight_decay"],
+        "fp16": fp16,
+        "optim": "adafactor",
+        "gradient_checkpointing": device == "cuda",
+        eval_arg: strat,
+        "save_strategy": "no",
+        "save_safetensors": False,
+        "logging_steps": cfg["logging_steps"],
+        "load_best_model_at_end": False,
+        "metric_for_best_model": "bleu",
+        "greater_is_better": True,
+        "predict_with_generate": True,
+        "generation_max_length": max_tgt_len,
+        "report_to": "none",
+        "resume_from_checkpoint": args.resume or cfg.get("resume_from_checkpoint"),
+    }
+    if strat == "steps":
+        training_kwargs["eval_steps"] = cfg["eval_steps"]
+
+    valid_params = inspect.signature(Seq2SeqTrainingArguments.__init__).parameters
+    if "warmup_steps" in valid_params and "warmup_ratio" not in valid_params:
+        training_kwargs["warmup_steps"] = 10
+    filtered_kwargs = {k: v for k, v in training_kwargs.items() if k in valid_params}
+    training_args = Seq2SeqTrainingArguments(**filtered_kwargs)
+
+    trainer_sig = inspect.signature(Seq2SeqTrainer.__init__)
+    tok_kw = {"processing_class": tokenizer} if "processing_class" in trainer_sig.parameters else {"tokenizer": tokenizer}
 
     trainer = Seq2SeqTrainer(
         model=model,
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=val_ds,
-        tokenizer=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
+        **tok_kw,
     )
+
+    def custom_save(out_dir=None, state_dict=None):
+        target = Path(out_dir or output_dir)
+        target.mkdir(parents=True, exist_ok=True)
+        trainable_names = {n for n, p in model.named_parameters() if p.requires_grad}
+        sd = {k: v.contiguous().half() for k, v in model.state_dict().items() if k in trainable_names}
+        try:
+            from safetensors.torch import save_file
+            save_file(sd, target / "model.safetensors")
+            logger.info(f"[NMT-Train] Saved FP16 adapter safetensors to {target / 'model.safetensors'}")
+        except Exception as e:
+            logger.warning(f"[NMT-Train] Safetensors save failed ({e}), using torch.save...")
+            torch.save(sd, target / "pytorch_model.bin", _use_new_zipfile_serialization=False)
+        model.config.save_pretrained(target)
+
+    trainer._save = custom_save
 
     logger.info("[NMT-Train] 🚀 Starting NLLB fine-tuning...")
     trainer.train(resume_from_checkpoint=args.resume)
 
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-    trainer.save_model(output_dir)
+    custom_save(output_dir)
     tokenizer.save_pretrained(output_dir)
 
     eval_results = trainer.evaluate()

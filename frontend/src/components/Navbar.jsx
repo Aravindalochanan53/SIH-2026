@@ -37,7 +37,7 @@ export function Navbar() {
           <Search size={16} className="search-icon" />
           <input
             type="text"
-            placeholder="Search lessons, phrases, worksheets..."
+            placeholder="Search translations, phrases, languages..."
             className="search-input"
           />
         </div>

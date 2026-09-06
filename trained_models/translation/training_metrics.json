@@ -1,0 +1,15 @@
+{
+  "final_bleu": 0.0,
+  "eval_results": {
+    "eval_loss": 13.068673133850098,
+    "eval_bleu": 0.0,
+    "eval_runtime": 8.5739,
+    "eval_samples_per_second": 2.099,
+    "eval_steps_per_second": 2.099,
+    "epoch": 1.0
+  },
+  "base_model": "facebook/nllb-200-distilled-600M",
+  "training_date": "2026-09-04T11:32:53Z",
+  "num_epochs": 1,
+  "train_pairs": 66
+}

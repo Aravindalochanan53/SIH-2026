@@ -7,13 +7,12 @@
 # ============================================================
 # Values: "auto" | "cpu" | "cuda" | "cuda:0" | "mps"
 # "auto" = detect best available device automatically
-device: "auto"
+device: "cuda"
 
-# Intel Iris Xe / CPU mode: use INT8 quantization, small batch sizes
-# When CUDA is available, set fp16: true and increase batch_size
-fp16: false          # FP16 only on CUDA GPU. Keep false for CPU.
-bf16: false          # BF16 only on Ampere+ GPUs.
-quantization: "int8" # Options: "none" | "int8" | "int4"
+# NVIDIA GeForce RTX 3050 6GB GPU: use FP16 Tensor Cores, larger batch sizes
+fp16: true           # FP16 on CUDA GPU for Tensor Core acceleration
+bf16: false          # BF16 on Ampere+ GPUs
+quantization: "none" # Full FP16 precision on GPU
 
 # ============================================================
 # DIRECTORY STRUCTURE
@@ -69,10 +68,10 @@ asr:
       whisper_code: null
       fallback: "hi"
 
-  # Training hyperparameters (CPU-optimized defaults)
-  batch_size: 4              # Increase to 16-32 on GPU
-  eval_batch_size: 4
-  gradient_accumulation_steps: 8   # Effective batch = batch_size * grad_accum = 32
+  # Training hyperparameters (GPU-accelerated for 6GB VRAM)
+  batch_size: 16             # Optimized for RTX 3050 6GB
+  eval_batch_size: 16
+  gradient_accumulation_steps: 2   # Effective batch = 32
   learning_rate: 1.0e-5
   num_train_epochs: 3
   warmup_steps: 500
@@ -137,16 +136,16 @@ translation:
       nllb_tgt: null   # Not in NLLB; custom vocabulary extension needed
       pivot_required: true
 
-  # Training hyperparameters
-  batch_size: 8
-  eval_batch_size: 8
-  gradient_accumulation_steps: 4
+  # Training hyperparameters (Optimized for RTX 3050 6GB VRAM)
+  batch_size: 1
+  eval_batch_size: 1
+  gradient_accumulation_steps: 16
   learning_rate: 5.0e-5
   num_train_epochs: 5
   warmup_ratio: 0.1
   weight_decay: 0.01
-  max_source_length: 256
-  max_target_length: 256
+  max_source_length: 64
+  max_target_length: 64
   save_steps: 500
   eval_steps: 500
   logging_steps: 50
@@ -190,9 +189,9 @@ ner:
     - "B-SUBJECT"
     - "I-SUBJECT"
 
-  batch_size: 16
-  eval_batch_size: 32
-  gradient_accumulation_steps: 2
+  batch_size: 32
+  eval_batch_size: 64
+  gradient_accumulation_steps: 1
   learning_rate: 2.0e-5
   num_train_epochs: 10
   max_length: 256
@@ -237,34 +236,3 @@ tts:
   train_data: "data/tts/train"
   validation_data: "data/tts/validation"
 
-# ============================================================
-# TRANSLARA-EDU FINE-TUNING
-# ============================================================
-education:
-  # Base model — small open instruction-tuned LLM
-  # CPU:       "Qwen/Qwen2.5-0.5B-Instruct"   (~1GB RAM)
-  # 4-8GB GPU: "Qwen/Qwen2.5-1.5B-Instruct"
-  # 16+ GB:    "Qwen/Qwen2.5-7B-Instruct"
-  base_model: "Qwen/Qwen2.5-0.5B-Instruct"
-  output_model_name: "TRANSLARA-EDU-v1"
-  output_dir: "models/education/TRANSLARA-EDU-v1"
-
-  # Teaching grades
-  grades: [1, 2, 3]
-
-  # Training via PEFT/LoRA for memory efficiency
-  use_lora: true
-  lora_r: 16
-  lora_alpha: 32
-  lora_dropout: 0.1
-  lora_target_modules: ["q_proj", "v_proj"]
-
-  batch_size: 4
-  gradient_accumulation_steps: 8
-  learning_rate: 2.0e-4
-  num_train_epochs: 5
-  max_length: 1024
-  save_steps: 200
-  logging_steps: 20
-
-  train_data: "data/education"

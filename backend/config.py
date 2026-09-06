@@ -60,11 +60,11 @@ class Settings(BaseSettings):
     source_language: str = "ta"
     default_target_language: str = "ml"
 
-    # Local ASR Configuration (Faster-Whisper INT8 / Custom Local Model)
+    # Local ASR Configuration (Faster-Whisper FP16 CUDA / INT8 CPU)
     asr_backend: Literal["local_asr", "faster_whisper", "indic_conformer", "mock"] = "local_asr"
     whisper_model_size: str = "small"
-    whisper_device: str = "cpu"
-    whisper_compute_type: str = "int8"
+    whisper_device: str = "cuda"
+    whisper_compute_type: str = "float16"
 
     # Local NMT Configuration (Local Fine-Tuned Model / IndicTrans2 / Neural Grammar)
     nmt_backend: Literal["local_nmt", "indictrans2", "neural_grammar", "offline", "mock"] = "local_nmt"
@@ -81,11 +81,11 @@ class Settings(BaseSettings):
     vad_min_utterance_ms: int = 250
     vad_max_utterance_ms: int = 12000
 
-    # Latency Budget & Timeouts (ms)
-    asr_timeout_ms: int = 1200
-    nmt_timeout_ms: int = 1400
-    tts_timeout_ms: int = 1000
-    total_latency_target_ms: int = 3000
+    # Latency Budget & Timeouts (ms) - GPU Accelerated SLA
+    asr_timeout_ms: int = 600
+    nmt_timeout_ms: int = 600
+    tts_timeout_ms: int = 400
+    total_latency_target_ms: int = 1500
 
     # Offline SQLite Cache & Local Fallback
     cache_enabled: bool = True
